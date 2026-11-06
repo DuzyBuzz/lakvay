@@ -40,6 +40,9 @@ testem.log
 /typings
 __screenshots__/
 
+# Local environment configuration
+/src/environments/environment.ts
+
 # System files
 .DS_Store
 Thumbs.db
