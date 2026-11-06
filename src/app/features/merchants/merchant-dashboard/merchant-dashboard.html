@@ -1,0 +1,218 @@
+<div
+  class="fixed inset-0 z-[70] grid place-items-center overflow-y-auto bg-[#15213a]/75 p-3 backdrop-blur-md sm:p-6"
+  (click)="closed.emit()"
+  (keydown.escape)="closed.emit()"
+>
+  <section
+    class="my-auto w-full max-w-5xl overflow-hidden rounded-[28px] border border-white/50 bg-white shadow-[0_30px_100px_rgba(10,20,40,0.32)]"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="merchant-dashboard-title"
+    (click)="$event.stopPropagation()"
+  >
+    <header class="flex items-start justify-between gap-4 border-b border-[#eee8e4] px-5 py-5 sm:px-8 sm:py-6">
+      <div>
+        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8d0047]">Lakvay for business</p>
+        <h1 id="merchant-dashboard-title" class="mt-2 font-serif text-3xl font-semibold tracking-tight text-[#1d2d51]">
+          Your place, on the map.
+        </h1>
+        <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+          Add your location and business details. Published listings appear on the public map immediately.
+        </p>
+      </div>
+      <button
+        type="button"
+        class="grid h-10 w-10 shrink-0 place-items-center rounded-full text-2xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d2d51]"
+        aria-label="Close merchant dashboard"
+        (click)="closed.emit()"
+      >×</button>
+    </header>
+
+    <div class="grid max-h-[calc(100dvh-150px)] gap-6 overflow-y-auto p-5 sm:p-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)]">
+      <form class="space-y-4" [formGroup]="form" (submit)="submit($event)">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="block text-xs font-semibold text-slate-700" for="business-name">
+            Business name
+            <input
+              id="business-name"
+              class="mt-1.5 h-12 w-full rounded-xl border border-[#e7e1dc] bg-[#faf8f6] px-4 text-sm font-normal outline-none transition placeholder:text-slate-400 focus:border-[#8d0047] focus:bg-white focus:ring-4 focus:ring-[#8d0047]/10"
+              formControlName="name"
+              autocomplete="organization"
+              maxlength="100"
+              placeholder="e.g. Iloilo Heritage Café"
+              required
+            />
+          </label>
+          <label class="block text-xs font-semibold text-slate-700" for="business-category">
+            Category
+            <select
+              id="business-category"
+              class="mt-1.5 h-12 w-full rounded-xl border border-[#e7e1dc] bg-[#faf8f6] px-4 text-sm font-normal outline-none transition focus:border-[#8d0047] focus:bg-white focus:ring-4 focus:ring-[#8d0047]/10"
+              formControlName="category"
+              required
+            >
+              <option value="" disabled>Select a category</option>
+              <option>Restaurants</option>
+              <option>Coffee & cafés</option>
+              <option>Bakery & desserts</option>
+              <option>Bars & nightlife</option>
+              <option>Street food</option>
+              <option>Markets & shops</option>
+              <option>Other</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="block text-xs font-semibold text-slate-700" for="business-description">
+          About your business
+          <textarea
+            id="business-description"
+            class="mt-1.5 min-h-24 w-full resize-y rounded-xl border border-[#e7e1dc] bg-[#faf8f6] px-4 py-3 text-sm font-normal outline-none transition placeholder:text-slate-400 focus:border-[#8d0047] focus:bg-white focus:ring-4 focus:ring-[#8d0047]/10"
+            formControlName="description"
+            maxlength="1000"
+            placeholder="Tell visitors what makes your place special."
+          ></textarea>
+        </label>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="block text-xs font-semibold text-slate-700" for="business-city">
+            City
+            <input
+              id="business-city"
+              class="mt-1.5 h-12 w-full rounded-xl border border-[#e7e1dc] bg-[#faf8f6] px-4 text-sm font-normal outline-none transition focus:border-[#8d0047] focus:bg-white focus:ring-4 focus:ring-[#8d0047]/10"
+              formControlName="city"
+              maxlength="80"
+              required
+            />
+          </label>
+          <label class="block text-xs font-semibold text-slate-700" for="business-website">
+            Website <span class="font-normal text-slate-500">(optional)</span>
+            <input
+              id="business-website"
+              class="mt-1.5 h-12 w-full rounded-xl border border-[#e7e1dc] bg-[#faf8f6] px-4 text-sm font-normal outline-none transition focus:border-[#8d0047] focus:bg-white focus:ring-4 focus:ring-[#8d0047]/10"
+              formControlName="website"
+              type="url"
+              maxlength="300"
+              placeholder="https://example.com"
+            />
+          </label>
+        </div>
+
+        <label class="block text-xs font-semibold text-slate-700" for="business-address">
+          Street address
+          <input
+            id="business-address"
+            class="mt-1.5 h-12 w-full rounded-xl border border-[#e7e1dc] bg-[#faf8f6] px-4 text-sm font-normal outline-none transition focus:border-[#8d0047] focus:bg-white focus:ring-4 focus:ring-[#8d0047]/10"
+            formControlName="address"
+            autocomplete="street-address"
+            maxlength="200"
+            placeholder="Street, barangay, and nearby landmark"
+            required
+          />
+        </label>
+
+        <fieldset class="rounded-2xl border border-[#eee8e4] bg-[#fcfaf8] p-4">
+          <legend class="px-1 text-xs font-bold text-slate-800">Pin your business on the map</legend>
+          <p class="mb-3 text-xs leading-5 text-slate-600" id="business-map-help">
+            Tap or click the map to place a pin at your entrance, or focus the map and press Enter or Space. Drag the pin to adjust it.
+          </p>
+          <div class="relative isolate z-0 h-64 w-full overflow-hidden rounded-xl border border-[#e7e1dc]">
+            <app-map-canvas
+              class="block h-full w-full"
+              [businesses]="[]"
+              [selectionMode]="true"
+              [selectedLocation]="selectedLocation()"
+              (locationSelected)="setSelectedLocation($event)"
+            ></app-map-canvas>
+          </div>
+          <p class="mt-2 text-xs text-slate-600" aria-live="polite">
+            @if (selectedLocation()) {
+              Pin selected. Drag it or choose another point to adjust.
+            } @else {
+              Choose a point on the map to continue.
+            }
+          </p>
+          <div class="grid gap-3 sm:grid-cols-2">
+            <label class="block text-xs font-semibold text-slate-700" for="business-latitude">
+              Latitude
+              <input
+                id="business-latitude"
+                class="mt-1.5 h-11 w-full rounded-xl border border-[#e7e1dc] bg-white px-3 text-sm font-normal outline-none transition focus:border-[#8d0047] focus:ring-4 focus:ring-[#8d0047]/10"
+                [value]="latitude()"
+                type="text"
+                readonly
+                aria-describedby="business-map-help"
+                placeholder="Select a location on the map"
+              />
+            </label>
+            <label class="block text-xs font-semibold text-slate-700" for="business-longitude">
+              Longitude
+              <input
+                id="business-longitude"
+                class="mt-1.5 h-11 w-full rounded-xl border border-[#e7e1dc] bg-white px-3 text-sm font-normal outline-none transition focus:border-[#8d0047] focus:ring-4 focus:ring-[#8d0047]/10"
+                [value]="longitude()"
+                type="text"
+                readonly
+                aria-describedby="business-map-help"
+                placeholder="Select a location on the map"
+              />
+            </label>
+          </div>
+        </fieldset>
+
+        @if (error()) {
+          <p class="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800" role="alert">{{ error() }}</p>
+        }
+        @if (notice()) {
+          <p class="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-900" role="status">{{ notice() }}</p>
+        }
+
+        <button
+          type="submit"
+          class="h-12 w-full rounded-xl bg-[#1d2d51] px-5 text-sm font-semibold text-white shadow-md shadow-[#1d2d51]/15 transition hover:bg-[#293d68] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d2d51] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+          [disabled]="form.invalid || !selectedLocation() || submitting()"
+        >{{ submitting() ? 'Saving listing…' : editingListingId() ? 'Save listing changes' : 'Publish listing' }}</button>
+        @if (editingListingId()) {
+          <button
+            type="button"
+            class="ml-2 h-12 rounded-xl border border-[#d9cfc9] px-5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+            (click)="cancelEditing()"
+          >Cancel edit</button>
+        }
+      </form>
+
+      <aside class="rounded-2xl border border-[#eee8e4] bg-[#faf8f6] p-4 sm:p-5" aria-labelledby="merchant-listings-title">
+        <h2 id="merchant-listings-title" class="font-semibold text-[#1d2d51]">Your listings</h2>
+        <p class="mt-1 text-xs leading-5 text-slate-600">Update the details and map pin for your published places.</p>
+        @if (loading()) {
+          <p class="mt-4 text-sm text-slate-600" role="status">Loading your listings…</p>
+        } @else {
+          <div class="mt-4 space-y-3">
+            @for (listing of listings(); track listing.id) {
+              <article class="rounded-xl border border-[#eee8e4] bg-white p-4">
+                <h3 class="font-semibold text-slate-900">{{ listing.name }}</h3>
+                <p class="mt-1 text-xs text-slate-600">{{ listing.category }} · {{ listing.city }}</p>
+                <span
+                  class="mt-3 inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold"
+                  [class.bg-emerald-50]="listing.publicationStatus === 'published'"
+                  [class.text-emerald-800]="listing.publicationStatus === 'published'"
+                  [class.bg-amber-50]="listing.publicationStatus !== 'published'"
+                  [class.text-amber-900]="listing.publicationStatus !== 'published'"
+                >{{ statusLabel(listing.publicationStatus) }}</span>
+                <button
+                  type="button"
+                  class="mt-3 block text-xs font-semibold text-[#8d0047] underline-offset-2 hover:underline"
+                  (click)="editListing(listing)"
+                >Edit listing</button>
+              </article>
+            } @empty {
+              <p class="mt-4 rounded-xl border border-dashed border-[#d9cfc9] bg-white p-4 text-sm leading-5 text-slate-600">
+                Your submitted places will appear here.
+              </p>
+            }
+          </div>
+        }
+      </aside>
+    </div>
+  </section>
+</div>

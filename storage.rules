@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /post-media/{uid}/{postId}/{fileName} {
+      allow read: if true;
+      allow create: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.metadata.ownerUid == uid
+        && request.resource.metadata.postId == postId
+        && (
+          (
+            request.resource.contentType in ['image/jpeg', 'image/png', 'image/webp']
+            && request.resource.size <= 10 * 1024 * 1024
+          )
+          || (
+            request.resource.contentType in ['video/mp4', 'video/webm']
+            && request.resource.size <= 80 * 1024 * 1024
+          )
+        );
+      allow update: if false;
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}

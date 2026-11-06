@@ -1,0 +1,1626 @@
+<div
+  class="min-h-dvh text-[#1d2d51]"
+  [class.bg-[#faf8f6]]="!darkTheme()"
+  [class.bg-slate-950]="darkTheme()"
+  [class.text-white]="darkTheme()"
+>
+  <div class="flex min-h-dvh">
+    <aside
+      class="hidden w-[224px] shrink-0 flex-col border-r border-[#eee8e4] bg-white px-5 py-6 lg:flex"
+    >
+      <button
+        class="mb-9 flex flex-col items-center gap-2 rounded-xl px-2 py-1 text-center"
+        aria-label="Lakvay home"
+        (click)="navigate('home')"
+      >
+        <img
+          class="h-12 w-12 object-contain"
+          ngSrc="/assets/lakvaylogo-96.png"
+          alt=""
+          width="96"
+          height="96"
+        />
+        <img
+          class="h-auto w-[148px] object-contain"
+          ngSrc="/assets/lakvaysublogo-296.png"
+          alt="Lakvay — Navigate Flavors. Discover Iloilo."
+          width="1962"
+          height="450"
+        />
+      </button>
+
+      <nav aria-label="Main navigation" class="space-y-1.5">
+        <button
+          class="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left text-sm font-medium text-slate-600 transition hover:bg-[#fff4f8] hover:text-[#d9006b]"
+          [class.bg-[#fff1f7]]="activeView() === 'home'"
+          [class.text-[#bd005e]]="activeView() === 'home'"
+          (click)="navigate('home')"
+        >
+          <svg
+            aria-hidden="true"
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+          >
+            <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" />
+          </svg>
+          Home
+        </button>
+        <button
+          class="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left text-sm font-medium text-slate-600 transition hover:bg-[#fff4f8] hover:text-[#d9006b]"
+          [class.bg-[#fff1f7]]="activeView() === 'chats'"
+          [class.text-[#bd005e]]="activeView() === 'chats'"
+          (click)="navigate('chats')"
+        >
+          <svg
+            aria-hidden="true"
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+          >
+            <path
+              d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6A8.4 8.4 0 0 1 12.5 3h.5a8.5 8.5 0 0 1 8 8z"
+            />
+            <path d="M8 12h.01M12 12h.01M16 12h.01" />
+          </svg>
+          Chats
+        </button>
+        <button
+          class="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left text-sm font-medium text-slate-600 transition hover:bg-[#fff4f8] hover:text-[#d9006b]"
+          [class.bg-[#fff1f7]]="activeView() === 'map'"
+          [class.text-[#bd005e]]="activeView() === 'map'"
+          (click)="navigate('map')"
+        >
+          <svg
+            aria-hidden="true"
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+          >
+            <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg>
+          Map
+        </button>
+        <button
+          class="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left text-sm font-medium text-slate-600 transition hover:bg-[#fff4f8] hover:text-[#d9006b]"
+          [class.bg-[#fff1f7]]="activeView() === 'saved'"
+          [class.text-[#bd005e]]="activeView() === 'saved'"
+          (click)="navigate('saved')"
+        >
+          <svg
+            aria-hidden="true"
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+          >
+            <path d="M6 3h12v18l-6-4-6 4z" />
+          </svg>
+          Saved
+        </button>
+        <button
+          class="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left text-sm font-medium text-slate-600 transition hover:bg-[#fff4f8] hover:text-[#d9006b]"
+          [class.bg-[#fff1f7]]="activeView() === 'profile'"
+          [class.text-[#bd005e]]="activeView() === 'profile'"
+          (click)="navigate('profile')"
+        >
+          <svg
+            aria-hidden="true"
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+          >
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 21a8 8 0 0 1 16 0" />
+          </svg>
+          Profile
+        </button>
+      </nav>
+
+      <section
+        class="mt-7 rounded-2xl border border-[#f1e9e4] bg-[#fcf8f5] p-4"
+        aria-label="Business promotion"
+      >
+        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-[#c65b45]">
+          Lakvay for business
+        </p>
+        <p class="mt-3 text-sm font-bold text-slate-900">Are you a merchant?</p>
+        <p class="mt-1 text-xs leading-5 text-slate-600">
+          Manage your listing and reach more locals and travelers.
+        </p>
+        <button
+          class="mt-3 rounded-lg bg-[#1d2d51] px-3 py-2.5 text-xs font-semibold text-white transition hover:bg-[#293d68] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d2d51]"
+          (click)="openMerchantDashboard()"
+        >
+          Go to Dashboard
+        </button>
+      </section>
+
+      <fieldset class="mt-5 rounded-xl border border-[#eee8e4] px-3 py-2">
+        <legend class="px-1 text-[10px] font-semibold">Theme</legend>
+        <div class="flex items-center justify-between text-[10px]">
+          <label class="flex items-center gap-1.5 text-[#bd005e]"
+            ><input type="radio" name="theme" checked class="accent-[#bd005e]" /> Light</label
+          >
+          <label class="flex items-center gap-1.5 text-slate-500"
+            ><input
+              type="radio"
+              name="theme"
+              class="accent-[#bd005e]"
+              [checked]="darkTheme()"
+              (change)="toggleTheme()"
+            />
+            Dark</label
+          >
+        </div>
+      </fieldset>
+
+      <div class="mt-auto space-y-1 pt-6">
+        <button
+          class="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm hover:bg-slate-50"
+          (click)="openHelp()"
+        >
+          <span aria-hidden="true" class="text-lg">ⓘ</span> Help Center
+        </button>
+        <button
+          class="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm hover:bg-slate-50"
+          (click)="openSettings()"
+        >
+          <span aria-hidden="true" class="text-lg">⚙</span> Settings
+        </button>
+        @if (signedInUser()) {
+          <button
+            class="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm hover:bg-slate-50"
+            (click)="signOut()"
+          >
+            <span aria-hidden="true" class="text-lg">⇥</span> Log Out
+          </button>
+        } @else {
+          <button
+            class="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm hover:bg-slate-50"
+            (click)="openAuthDialog()"
+          >
+            <span aria-hidden="true" class="text-lg">⇥</span> Sign in
+          </button>
+        }
+        <p class="px-2 pt-5 text-[10px] leading-4 text-slate-400">
+          © 2026 LAKVAY<br />All rights reserved
+        </p>
+      </div>
+    </aside>
+
+    <div class="flex min-w-0 flex-1 flex-col">
+      <header
+        class="sticky top-0 z-20 flex h-[76px] items-center gap-4 border-b border-[#eee8e4] bg-white/95 px-4 shadow-[0_4px_18px_rgba(29,45,81,0.035)] backdrop-blur sm:px-6 lg:px-7"
+      >
+        <button
+          class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#1d2d51] text-white transition hover:bg-[#293d68] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d2d51] lg:hidden"
+          aria-label="Open navigation"
+          [attr.aria-expanded]="mobileMenuOpen()"
+          (click)="mobileMenuOpen.update((open) => !open)"
+        >
+          <svg
+            aria-hidden="true"
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <img
+          class="h-8 w-8 shrink-0 object-contain lg:hidden"
+          ngSrc="/assets/lakvaylogo-96.png"
+          alt="Lakvay"
+          width="64"
+          height="64"
+        />
+        <button
+          class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#d9006b] text-white shadow-sm transition hover:bg-[#bd005e] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d9006b]"
+          aria-label="Share a food discovery"
+          (click)="openShareDialog()"
+        >
+          <svg
+            aria-hidden="true"
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path d="M12 20h9" />
+            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z" />
+            <path d="M15 5l4 4" />
+          </svg>
+        </button>
+        <label
+          class="flex h-11 min-w-0 max-w-[540px] flex-1 items-center gap-3 rounded-xl border border-[#e9e2dd] bg-[#faf8f6] px-4 transition focus-within:border-[#d9006b] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#d9006b]/10"
+        >
+          <svg
+            aria-hidden="true"
+            class="h-5 w-5 shrink-0 text-slate-500"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-4-4" />
+          </svg>
+          <span class="sr-only">Search places, food, or people</span>
+          <input
+            class="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none placeholder:text-slate-500"
+            type="search"
+            placeholder="Search for places, food, people..."
+            [value]="searchTerm()"
+            (input)="submitSearch($event)"
+          />
+        </label>
+        <div class="ml-auto hidden items-center gap-5 sm:flex">
+          <button
+            class="flex items-center gap-2 whitespace-nowrap text-sm text-slate-700 hover:text-[#bd005e]"
+            (click)="navigate('map')"
+          >
+            <svg
+              aria-hidden="true"
+              class="h-5 w-5 text-[#bd005e]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+            >
+              <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+            Iloilo City <span aria-hidden="true" class="text-slate-400">⌄</span>
+          </button>
+          <button
+            class="relative grid h-9 w-9 place-items-center rounded-full hover:bg-slate-100"
+            aria-label="Notifications"
+            (click)="notificationsOpen.update((open) => !open)"
+          >
+            <svg
+              aria-hidden="true"
+              class="h-5 w-5 text-slate-700"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+            >
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" />
+            </svg>
+            @if (notifications().some((notification) => !notification.read)) {
+              <span
+                class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-[#bd005e]"
+                aria-label="Unread notifications"
+              ></span>
+            }
+          </button>
+          @if (notificationsOpen()) {
+            <section
+              class="absolute right-4 top-14 z-40 w-80 rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow-xl"
+              aria-label="Notifications"
+            >
+              <div class="flex items-center justify-between">
+                <h2 class="font-bold">Notifications</h2>
+                <button class="text-xs text-[#bd005e]" (click)="markNotificationsRead()">
+                  Mark read
+                </button>
+              </div>
+              @for (notification of notifications(); track notification.id) {
+                <article
+                  class="mt-3 border-t border-slate-100 pt-3"
+                  [class.opacity-60]="notification.read"
+                >
+                  <p class="text-sm font-semibold">{{ notification.title }}</p>
+                  <p class="mt-1 text-xs text-slate-600">{{ notification.body }}</p>
+                </article>
+              } @empty {
+                <p class="mt-4 text-sm text-slate-600">You are all caught up.</p>
+              }
+            </section>
+          }
+          @if (signedInUser(); as user) {
+            <div class="flex items-center gap-2 text-right">
+              <span class="hidden leading-4 sm:block"
+                ><span class="block max-w-36 truncate text-xs font-semibold text-slate-900">{{
+                  user.displayName || user.email || user.phoneNumber
+                }}</span
+                ><span class="block text-xs text-slate-500">Signed in</span></span
+              >
+              <span class="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-[#fff0f5]">
+                @if (user.photoURL) {
+                  <img
+                    class="object-cover"
+                    [ngSrc]="user.photoURL"
+                    [alt]="user.displayName || 'Account profile photo'"
+                    fill
+                  />
+                } @else {
+                  <span
+                    class="grid h-full w-full place-items-center font-semibold text-[#bd005e]"
+                    >{{ (user.displayName || user.email || 'L').slice(0, 1).toUpperCase() }}</span
+                  >
+                }
+              </span>
+              <button class="text-xs font-semibold text-[#bd005e]" (click)="signOut()">
+                Sign out
+              </button>
+            </div>
+          } @else {
+            <button
+              class="rounded-xl bg-[#1d2d51] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#293d68]"
+              (click)="openAuthDialog()"
+            >
+              Sign in
+            </button>
+          }
+        </div>
+      </header>
+
+      @if (mobileMenuOpen()) {
+        <nav
+          aria-label="Mobile navigation"
+          class="absolute left-0 right-0 top-[70px] z-30 grid grid-cols-6 gap-1 border-b border-slate-200 bg-white p-2 shadow-lg lg:hidden"
+        >
+          <button class="rounded-lg px-2 py-2 text-xs" (click)="navigate('home')">Home</button>
+          <button class="rounded-lg px-2 py-2 text-xs" (click)="navigate('chats')">Chats</button>
+          <button class="rounded-lg px-2 py-2 text-xs" (click)="navigate('map')">Map</button>
+          <button class="rounded-lg px-2 py-2 text-xs" (click)="navigate('saved')">Saved</button>
+          <button class="rounded-lg px-2 py-2 text-xs" (click)="navigate('profile')">
+            Profile
+          </button>
+          <button
+            class="rounded-lg px-2 py-2 text-xs text-[#bd005e]"
+            (click)="mobileMenuOpen.set(false); openMerchantDashboard()"
+          >
+            For Business
+          </button>
+        </nav>
+      }
+
+      @if (!firebaseConfigured) {
+        <div
+          class="mx-4 mt-4 rounded-2xl border border-[#e8d7bd] bg-[#fff9ef] px-4 py-3 text-sm text-[#684d2a] sm:mx-6 lg:mx-7"
+          role="status"
+        >
+          Firebase is not connected. Add your web app settings to load live places, posts, and
+          account data.
+        </div>
+      }
+      @if (backendError()) {
+        <div
+          class="mx-4 mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-900 sm:mx-6 lg:mx-7"
+          role="alert"
+        >
+          {{ backendError() }}
+        </div>
+      }
+
+      <main class="min-h-0 flex-1">
+        @if (activeView() === 'home') {
+          <div
+            class="mx-auto grid max-w-[1600px] grid-cols-1 gap-8 px-4 py-6 sm:px-7 xl:grid-cols-[minmax(0,2fr)_minmax(320px,0.98fr)] xl:px-8"
+          >
+            <section class="min-w-0">
+              <div
+                class="relative isolate flex min-h-[300px] overflow-hidden rounded-[28px] bg-[#f5e5d9] shadow-[0_18px_45px_rgba(55,39,29,0.10)] sm:min-h-[340px]"
+              >
+                <img
+                  class="absolute inset-0 -z-20 object-cover object-[center_53%]"
+                  ngSrc="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&crop=entropy&w=1500&h=700&q=85"
+                  alt=""
+                  fill
+                  priority
+                />
+                <div
+                  class="absolute inset-0 -z-10 bg-gradient-to-r from-[#fffaf6] via-[#fffaf6]/95 to-[#fffaf6]/10"
+                ></div>
+                <div
+                  class="flex max-w-[570px] flex-col items-start justify-center px-6 py-9 sm:px-10"
+                >
+                  <span
+                    class="mb-4 inline-flex items-center gap-2 rounded-full border border-[#ecd8cd] bg-white/75 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#8e5b48] shadow-sm"
+                  >
+                    <span class="h-1.5 w-1.5 rounded-full bg-[#d9006b]"></span> A taste of Iloilo
+                  </span>
+                  <h1
+                    class="font-serif text-4xl font-semibold leading-[1.04] tracking-[-0.04em] text-[#14213f] sm:text-[52px]"
+                  >
+                    What’s your<br /><span class="text-[#bd005e]">next food journey?</span>
+                  </h1>
+                  <p class="mt-4 max-w-[340px] text-sm leading-6 text-slate-600 sm:text-base">
+                    Discover amazing local food places and real stories from real people.
+                  </p>
+                  <button
+                    class="mt-6 inline-flex items-center gap-3 rounded-xl bg-[#1d2d51] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#1d2d51]/15 transition hover:-translate-y-0.5 hover:bg-[#293d68] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d2d51]"
+                    (click)="navigate('map')"
+                  >
+                    Start Exploring <span aria-hidden="true">➜</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="mt-8 flex items-center justify-between gap-3">
+                <div>
+                  <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#b26653]">
+                    Curated for you
+                  </p>
+                  <h2 class="mt-1 text-xl font-bold tracking-tight sm:text-2xl">
+                    Explore Collections
+                  </h2>
+                </div>
+                <button
+                  class="text-sm font-semibold text-[#bd005e] hover:underline"
+                  (click)="navigate('map')"
+                >
+                  See all
+                </button>
+              </div>
+              <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+                @for (collection of collections; track collection.title) {
+                  <button
+                    class="group relative flex h-[160px] flex-col justify-end overflow-hidden rounded-2xl bg-slate-200 p-3.5 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-lg sm:h-[178px]"
+                    (click)="activeCategory.set(collection.category); navigate('map')"
+                  >
+                    <img
+                      class="absolute inset-0 object-cover transition duration-500 group-hover:scale-105"
+                      [ngSrc]="collection.image"
+                      [alt]="collection.title"
+                      fill
+                      loading="lazy"
+                    />
+                    <span
+                      class="absolute inset-0 bg-gradient-to-t from-[#111827]/85 via-[#111827]/10 to-transparent"
+                    ></span>
+                    <span
+                      class="relative z-10 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/75"
+                      >{{ collection.category }}</span
+                    >
+                    <span class="relative z-10 mt-1 text-sm font-bold leading-5 text-white">{{
+                      collection.title
+                    }}</span>
+                  </button>
+                }
+              </div>
+
+              <div class="mt-9 flex items-end justify-between">
+                <div>
+                  <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#b26653]">
+                    From the community
+                  </p>
+                  <h2 class="mt-1 text-xl font-bold tracking-tight sm:text-2xl">
+                    Community Discoveries
+                  </h2>
+                  <p class="mt-1 text-sm text-slate-500">Real stories. Real Iloilo.</p>
+                </div>
+                <button
+                  class="hidden items-center gap-2 rounded-xl border border-[#e8d7d1] bg-white px-4 py-2.5 text-sm font-semibold text-[#bd005e] shadow-sm transition hover:border-[#d9006b] sm:inline-flex"
+                  (click)="openShareDialog()"
+                >
+                  Share a discovery <span aria-hidden="true">＋</span>
+                </button>
+              </div>
+              @if (postsLoading()) {
+                <p
+                  class="mt-3 rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-600"
+                  role="status"
+                >
+                  Loading community discoveries…
+                </p>
+              } @else {
+                @for (post of posts(); track post.id) {
+                  <article
+                    class="mt-4 rounded-2xl border border-[#eee8e4] bg-white p-4 shadow-[0_8px_24px_rgba(29,45,81,0.045)] sm:p-6"
+                  >
+                    <div class="flex items-center gap-3">
+                      <span
+                        class="relative grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-full bg-[#fff0f5] font-semibold text-[#bd005e] sm:h-[76px] sm:w-[76px]"
+                      >
+                        @if (post.authorPhotoURL) {
+                          <img
+                            class="object-cover"
+                            [ngSrc]="post.authorPhotoURL"
+                            [alt]="post.authorDisplayName + ' profile photo'"
+                            fill
+                          />
+                        } @else {
+                          {{ post.authorDisplayName.slice(0, 1).toUpperCase() }}
+                        }
+                      </span>
+                      <div class="min-w-0">
+                        <div class="flex flex-wrap items-center gap-2">
+                          <h3 class="font-bold sm:text-lg">
+                            {{ post.authorDisplayName || 'Lakvay Explorer' }}
+                          </h3>
+                          @if (post.businessId) {
+                            <span class="text-slate-400">·</span>
+                            <button
+                              class="font-semibold hover:text-[#bd005e]"
+                              (click)="openBusinessById(post.businessId)"
+                            >
+                              {{ post.businessName }}
+                            </button>
+                          }
+                        </div>
+                        <p class="text-xs text-slate-500 sm:text-sm">Community discovery</p>
+                      </div>
+                    </div>
+                    <p
+                      class="mt-4 whitespace-pre-line text-sm leading-6 text-slate-700 sm:text-base"
+                    >
+                      {{ post.text }}
+                    </p>
+                    @for (media of post.media; track media.downloadURL) {
+                      <div
+                        class="relative mt-4 max-h-[440px] min-h-[180px] w-full overflow-hidden rounded-lg bg-slate-100"
+                      >
+                        @if (media.contentType.startsWith('video/')) {
+                          <video
+                            class="max-h-[440px] w-full"
+                            [src]="media.downloadURL"
+                            [attr.aria-label]="media.altText || 'Community discovery video'"
+                            controls
+                            preload="metadata"
+                          ></video>
+                        } @else {
+                          <img
+                            class="max-h-[440px] w-full object-contain"
+                            [src]="media.downloadURL"
+                            [alt]="media.altText || 'Community discovery photo'"
+                            loading="lazy"
+                          />
+                        }
+                      </div>
+                    }
+                    <div
+                      class="mt-4 flex items-center gap-5 border-t border-slate-100 pt-3 text-sm text-slate-500"
+                    >
+                      <button [class.text-[#bd005e]]="isPostLiked(post.id)" aria-label="Like post" (click)="togglePostLike(post)">♥ {{ post.likeCount + (isPostLiked(post.id) ? 1 : 0) }} likes</button>
+                      <span>{{ post.commentCount }} comments</span>
+                      <button class="hover:text-[#bd005e]" (click)="beginComment(post.id)">Comment</button>
+                      <button
+                        class="ml-auto inline-flex items-center gap-2 transition hover:text-[#bd005e]"
+                        (click)="openShareDialog()"
+                      >
+                        <span aria-hidden="true">↗</span> Share
+                      </button>
+                    </div>
+                    @if (commentPostId() === post.id) {
+                      <form class="mt-3 flex gap-2" (submit)="submitComment($event)">
+                        <input class="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" aria-label="Comment text" maxlength="500" [value]="commentText()" (input)="updateCommentText($event)" placeholder="Write a comment" />
+                        <button class="rounded-lg bg-[#bd005e] px-3 py-2 text-xs font-semibold text-white" [disabled]="!commentText().trim()">Send</button>
+                      </form>
+                    }
+                  </article>
+                } @empty {
+                  <div
+                    class="mt-4 rounded-2xl border border-dashed border-[#ded4ce] bg-white p-9 text-center"
+                  >
+                    <h3 class="font-semibold">No community discoveries yet</h3>
+                    <p class="mt-1 text-sm text-slate-600">
+                      Be the first to share something you found.
+                    </p>
+                    <button
+                      class="mt-4 rounded-lg bg-[#bd005e] px-4 py-2 text-sm font-semibold text-white"
+                      (click)="openShareDialog()"
+                    >
+                      Share a discovery
+                    </button>
+                  </div>
+                }
+              }
+            </section>
+
+            <aside class="min-w-0 space-y-5">
+              <section aria-labelledby="suggestions-title">
+                <h2 id="suggestions-title" class="mb-2 text-lg font-bold">Suggestions</h2>
+                @if (featuredBusiness(); as business) {
+                  <button
+                    class="relative flex min-h-[230px] w-full flex-col justify-between overflow-hidden rounded-2xl bg-slate-900 p-6 text-left text-white shadow-[0_12px_30px_rgba(29,45,81,0.14)] transition hover:shadow-lg"
+                    (click)="openBusiness(business)"
+                  >
+                    @if (business.coverImageUrl) {
+                      <img
+                        class="absolute inset-0 object-cover opacity-60"
+                        [ngSrc]="business.coverImageUrl"
+                        alt=""
+                        fill
+                        loading="lazy"
+                      />
+                    }
+                    <span
+                      class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-transparent"
+                    ></span>
+                    <span class="relative">
+                      <span class="block text-2xl font-extrabold tracking-wide sm:text-[28px]">{{
+                        business.name
+                      }}</span>
+                      <span class="mt-3 block text-sm"
+                        >{{ business.category
+                        }}<span>{{ business.city ? ' · ' + business.city : '' }}</span></span
+                      >
+                    </span>
+                    <span
+                      class="relative mt-4 w-fit rounded-lg bg-white px-3.5 py-2.5 text-xs font-bold text-[#1d2d51]"
+                      >View place</span
+                    >
+                  </button>
+                } @else {
+                  <div
+                    class="rounded-2xl border border-dashed border-[#ded4ce] bg-white p-6 text-sm text-slate-600"
+                  >
+                    Add published places in Firestore to see suggestions here.
+                  </div>
+                }
+              </section>
+
+              <section aria-labelledby="explore-map-title">
+                <div class="mb-3 flex items-center justify-between gap-2">
+                  <h2 id="explore-map-title" class="text-lg font-bold">Explore Iloilo</h2>
+                  <button
+                    class="flex items-center gap-2 text-xs font-semibold text-[#bd005e] hover:underline"
+                    (click)="navigate('map')"
+                  >
+                    View Full Map <span aria-hidden="true" class="text-slate-500">❯</span>
+                  </button>
+                </div>
+                <div
+                  class="relative block h-[250px] w-full overflow-hidden rounded-2xl border border-[#e9e2dd] bg-[#e8eee7] shadow-sm"
+                >
+                  <app-map-canvas
+                    [businesses]="businesses()"
+                    (businessSelected)="openBusiness($event)"
+                  />
+                  @if (featuredBusiness(); as business) {
+                    <button
+                      class="absolute bottom-3 left-3 rounded-lg bg-white p-3 text-left shadow-lg"
+                      (click)="openBusiness(business)"
+                      [attr.aria-label]="'Open ' + business.name"
+                    >
+                      <span class="block text-xs font-bold">{{ business.name }}</span>
+                      <span class="mt-1 block text-[10px] text-slate-600"
+                        >{{ business.category
+                        }}<span>{{ business.city ? ' · ' + business.city : '' }}</span></span
+                      >
+                      <span class="mt-2 inline-flex gap-2 text-[10px] font-semibold text-[#bd005e]"
+                        >View details</span
+                      >
+                    </button>
+                  }
+                </div>
+              </section>
+              <a
+                class="block overflow-hidden rounded-2xl shadow-sm transition hover:shadow-md"
+                href="https://www.openstreetmap.org/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span class="relative block h-40 w-full">
+                  <img
+                    class="object-cover"
+                    ngSrc="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=80"
+                    alt="Explore local restaurants in Iloilo"
+                    fill
+                    loading="lazy"
+                  />
+                </span>
+              </a>
+            </aside>
+            <section
+              class="col-span-full mt-1 overflow-hidden rounded-2xl"
+              aria-label="Be a Lakvay Explorer"
+            >
+              <img
+                class="h-auto w-full"
+                ngSrc="/assets/footer%20background.png"
+                alt="Lakvay: Be a Lakvay Explorer"
+                width="1242"
+                height="409"
+                loading="lazy"
+              />
+            </section>
+          </div>
+        }
+
+        @if (activeView() === 'map') {
+          <section
+            class="grid min-h-[calc(100dvh-76px)] grid-cols-1 xl:grid-cols-[minmax(350px,35%)_1fr]"
+          >
+            <div class="order-2 flex flex-col border-r border-[#eee8e4] bg-[#faf8f6] xl:order-1">
+              <div class="space-y-4 border-b border-[#eee8e4] p-4 sm:p-5">
+                <form
+                  class="flex gap-2"
+                  role="search"
+                  aria-label="Search businesses"
+                  (submit)="applyMapSearch($event)"
+                >
+                  <label
+                    class="flex h-12 flex-1 items-center gap-3 rounded-xl border border-[#e9e2dd] bg-white px-4 shadow-sm focus-within:border-[#bd005e] focus-within:ring-4 focus-within:ring-[#bd005e]/10"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="h-5 w-5 text-slate-500"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    >
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="m20 20-4-4" />
+                    </svg>
+                    <span class="sr-only">Search nearby places</span>
+                    <input
+                      class="w-full bg-transparent text-sm outline-none placeholder:text-slate-500"
+                      type="search"
+                      placeholder="Search businesses, categories, or address"
+                      [value]="searchTerm()"
+                      (input)="submitSearch($event)"
+                    />
+                  </label>
+                  <button
+                    type="submit"
+                    class="rounded-xl bg-[#1d2d51] px-4 text-sm font-semibold text-white transition hover:bg-[#293d68] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d2d51]"
+                  >
+                    Search
+                  </button>
+                </form>
+                <div class="flex flex-wrap gap-2">
+                  @for (category of categories(); track category) {
+                    <button
+                      class="rounded-full border px-3 py-2 text-xs font-semibold transition"
+                      [class.border-[#bd005e]]="activeCategory() === category"
+                      [class.bg-[#bd005e]]="activeCategory() === category"
+                      [class.text-white]="activeCategory() === category"
+                      [class.border-slate-300]="activeCategory() !== category"
+                      [class.bg-white]="activeCategory() !== category"
+                      (click)="activeCategory.set(category)"
+                    >
+                      {{ category }}
+                    </button>
+                  }
+                </div>
+              </div>
+              <div class="flex items-center justify-between px-5 py-4">
+                <p class="text-sm font-semibold">
+                  {{ filteredBusinesses().length }} places to explore
+                </p>
+                <button class="text-xs text-slate-500 hover:text-[#bd005e]">
+                  Sort: Recommended ⌄
+                </button>
+              </div>
+              <div class="space-y-3 overflow-y-auto px-4 pb-5">
+                @if (businessesLoading()) {
+                  <p
+                    class="rounded-xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-600"
+                    role="status"
+                  >
+                    Loading local places…
+                  </p>
+                } @else {
+                  @for (business of filteredBusinesses(); track business.id) {
+                    <article
+                      class="flex gap-3 rounded-2xl border border-[#eee8e4] bg-white p-3.5 shadow-[0_5px_20px_rgba(29,45,81,0.045)] transition hover:-translate-y-0.5 hover:shadow-md"
+                    >
+                      <span class="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg">
+                        <img
+                          class="object-cover"
+                          [ngSrc]="business.coverImageUrl || '/assets/lakvaylogo-96.png'"
+                          [alt]="business.name"
+                          fill
+                        />
+                      </span>
+                      <div class="min-w-0 flex-1">
+                        <div class="flex items-start justify-between gap-2">
+                          <div>
+                            <button
+                              class="text-left font-bold hover:text-[#bd005e]"
+                              (click)="openBusiness(business)"
+                            >
+                              {{ business.name }}
+                            </button>
+                            <p class="text-xs text-slate-500">
+                              {{ business.category
+                              }}<span>{{ business.city ? ' · ' + business.city : '' }}</span>
+                            </p>
+                          </div>
+                        </div>
+                        <p class="mt-1 line-clamp-2 text-xs leading-4 text-slate-600">
+                          {{ business.description }}
+                        </p>
+                        <div class="mt-2 flex gap-2">
+                          <button
+                            class="rounded-md border border-[#bd005e] px-2 py-1 text-[11px] font-semibold text-[#bd005e]"
+                            (click)="openConversation(business)"
+                          >
+                            Message
+                          </button>
+                          <button
+                            class="rounded-md bg-[#bd005e] px-2 py-1 text-[11px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+                            [disabled]="
+                              isDemoBusiness(business) || savingBusinessIds().includes(business.id)
+                            "
+                            (click)="toggleSaved(business)"
+                          >
+                            {{
+                              isDemoBusiness(business)
+                                ? 'Sample'
+                                : isSaved(business.id)
+                                  ? 'Saved'
+                                  : 'Save'
+                            }}
+                          </button>
+                          <button
+                            class="px-2 py-1 text-[11px] font-semibold text-slate-600"
+                            (click)="openBusiness(business)"
+                          >
+                            Details
+                          </button>
+                        </div>
+                      </div>
+                    </article>
+                  } @empty {
+                    <div
+                      class="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center"
+                    >
+                      <p class="font-semibold">No places found</p>
+                      <p class="mt-1 text-sm text-slate-500">Try another search or category.</p>
+                      <button
+                        class="mt-3 text-sm font-semibold text-[#bd005e]"
+                        (click)="searchTerm.set(''); activeCategory.set('All')"
+                      >
+                        Clear filters
+                      </button>
+                    </div>
+                  }
+                }
+              </div>
+            </div>
+            <div
+              class="relative order-1 min-h-[45vh] overflow-hidden bg-[#e7eee7] xl:order-2 xl:min-h-0"
+            >
+              <app-map-canvas
+                [businesses]="mappableBusinesses()"
+                (businessSelected)="openBusiness($event)"
+              />
+              <div
+                class="pointer-events-none absolute left-3 top-3 z-10 rounded-lg bg-white/95 px-3 py-2 text-xs font-semibold text-slate-800 shadow-md"
+                aria-live="polite"
+              >
+                {{ mappableBusinesses().length }} mapped
+                @if (businessesWithoutLocation()) {
+                  <span class="font-normal text-slate-600">
+                    · {{ businessesWithoutLocation() }} without a map pin</span
+                  >
+                }
+              </div>
+              @if (demoBusinessesActive()) {
+                <div
+                  class="pointer-events-none absolute right-3 top-3 z-10 rounded-full border border-amber-200 bg-amber-50/95 px-3 py-1.5 text-[10px] font-semibold text-amber-900 shadow-sm"
+                  aria-label="Sample map data; demo businesses are not real"
+                >
+                  Sample data
+                </div>
+              }
+            </div>
+          </section>
+        }
+
+        @if (activeView() === 'chats') {
+          <section
+            class="mx-auto grid min-h-[calc(100dvh-76px)] max-w-6xl gap-4 p-5 sm:p-8 lg:grid-cols-[280px_1fr]"
+          >
+            @if (!signedInUser()) {
+              <div
+                class="grid place-items-center rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center lg:col-span-2"
+              >
+                <div>
+                  <h1 class="text-2xl font-bold">Messages</h1>
+                  <p class="mt-2 text-sm text-slate-600">Sign in to message local businesses.</p>
+                  <button
+                    class="mt-4 rounded-lg bg-[#bd005e] px-4 py-2 text-sm font-semibold text-white"
+                    (click)="openAuthDialog()"
+                  >
+                    Sign in
+                  </button>
+                </div>
+              </div>
+            } @else {
+              <aside class="rounded-2xl border border-slate-200 bg-white p-4">
+                <div class="flex items-center justify-between">
+                  <h1 class="text-xl font-bold">Chats</h1>
+                  <span class="text-xs text-slate-500">{{ conversations().length }}</span>
+                </div>
+                <div class="mt-4 grid grid-cols-2 rounded-xl bg-slate-100 p-1" role="tablist" aria-label="Message filters">
+                  <button
+                    class="rounded-lg px-3 py-2 text-xs font-semibold"
+                    [class.bg-white]="chatFilter() === 'all'"
+                    [class.text-[#bd005e]]="chatFilter() === 'all'"
+                    role="tab"
+                    [attr.aria-selected]="chatFilter() === 'all'"
+                    (click)="chatFilter.set('all')"
+                  >All</button>
+                  <button
+                    class="rounded-lg px-3 py-2 text-xs font-semibold"
+                    [class.bg-white]="chatFilter() === 'unread'"
+                    [class.text-[#bd005e]]="chatFilter() === 'unread'"
+                    role="tab"
+                    [attr.aria-selected]="chatFilter() === 'unread'"
+                    (click)="chatFilter.set('unread')"
+                  >Unread</button>
+                </div>
+                @for (conversation of filteredConversations(); track conversation.id) {
+                  <button
+                    class="mt-3 w-full rounded-xl p-3 text-left hover:bg-[#fff1f7]"
+                    [class.bg-[#fff1f7]]="selectedConversation()?.id === conversation.id"
+                    (click)="selectConversation(conversation)"
+                  >
+                    <p class="truncate font-semibold">{{ conversation.businessName }}</p>
+                    <p class="mt-1 truncate text-xs text-slate-500">
+                      {{ conversation.lastMessage || 'Start a conversation' }}
+                    </p>
+                  </button>
+                } @empty {
+                  <p class="mt-5 text-sm text-slate-600">
+                    No {{ chatFilter() === 'unread' ? 'unread ' : '' }}chats yet.
+                  </p>
+                }
+              </aside>
+              <section
+                class="flex min-h-[500px] flex-col rounded-2xl border border-slate-200 bg-white p-4"
+              >
+                @if (openChatIds().length > 0) {
+                  <div class="mb-3 flex gap-2 overflow-x-auto border-b border-slate-100 pb-3" role="tablist" aria-label="Open conversations">
+                    @for (chatId of openChatIds(); track chatId) {
+                      @if (conversations().find((conversation) => conversation.id === chatId); as tabConversation) {
+                        <button
+                          class="group inline-flex max-w-48 shrink-0 items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold"
+                          [class.border-[#bd005e]]="selectedConversation()?.id === chatId"
+                          [class.bg-[#fff1f7]]="selectedConversation()?.id === chatId"
+                          role="tab"
+                          [attr.aria-selected]="selectedConversation()?.id === chatId"
+                          (click)="selectChatTab(chatId)"
+                        >
+                          <span class="truncate">{{ tabConversation.businessName }}</span>
+                          <span
+                            class="text-slate-400 hover:text-[#bd005e]"
+                            role="button"
+                            tabindex="0"
+                            aria-label="Close conversation tab"
+                            (click)="closeChatTab(chatId, $event)"
+                          >×</span>
+                        </button>
+                      }
+                    }
+                  </div>
+                }
+                @if (selectedConversation(); as conversation) {
+                  <header class="flex items-center gap-3 border-b border-slate-100 pb-3">
+                    <span class="grid h-10 w-10 place-items-center rounded-full bg-[#ffe5f1] font-bold text-[#bd005e]">
+                      {{ conversation.businessName.slice(0, 1).toUpperCase() }}
+                    </span>
+                    <div>
+                      <h2 class="font-bold">{{ conversation.businessName }}</h2>
+                      <p class="text-xs text-slate-500">Business chat</p>
+                    </div>
+                  </header>
+                  <div class="flex-1 space-y-3 overflow-y-auto py-4">
+                    @for (message of chatMessages(); track message.id) {
+                      <p
+                        class="max-w-[80%] rounded-2xl bg-slate-100 p-3 text-sm"
+                        [class.ml-auto]="message.senderUid === signedInUser()?.uid"
+                        [class.bg-[#ffe5f1]]="message.senderUid === signedInUser()?.uid"
+                      >
+                        {{ message.text }}
+                      </p>
+                    } @empty {
+                      <p class="text-sm text-slate-500">No messages yet.</p>
+                    }
+                  </div>
+                  <form
+                    class="flex gap-2 border-t border-slate-100 pt-3"
+                    (submit)="sendChatMessage($event)"
+                  >
+                    <textarea
+                      class="min-h-11 flex-1 rounded-xl border border-slate-200 p-3 text-sm"
+                      aria-label="Message"
+                      maxlength="1000"
+                      [value]="chatText()"
+                      (input)="updateChatText($event)"
+                      placeholder="Write a message"
+                    ></textarea
+                    ><button
+                      class="rounded-xl bg-[#bd005e] px-4 text-sm font-semibold text-white"
+                      [disabled]="!chatText().trim()"
+                    >
+                      Send
+                    </button>
+                  </form>
+                } @else {
+                  <div class="grid flex-1 place-items-center text-center text-sm text-slate-500">
+                    Choose a conversation to view messages.
+                  </div>
+                }
+              </section>
+            }
+          </section>
+        }
+
+        @if (activeView() === 'profile') {
+          <div class="mx-auto max-w-[1400px] p-4 sm:p-6">
+            @if (selectedBusiness(); as business) {
+              <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                <div class="relative h-40 w-full bg-[#edf1ec] sm:h-[210px]">
+                  @if (business.coverImageUrl) {
+                    <img
+                      class="object-cover"
+                      [ngSrc]="business.coverImageUrl"
+                      [alt]="business.name + ' cover photo'"
+                      fill
+                      priority
+                    />
+                  }
+                </div>
+                <div class="relative px-5 pb-6 sm:px-8">
+                  <div class="-mt-12 flex flex-wrap items-end justify-between gap-4">
+                    <div class="flex items-end gap-4">
+                      <span
+                        class="relative grid h-24 w-24 shrink-0 place-items-center overflow-hidden rounded-full border-4 border-white bg-[#fff0f5] text-2xl font-bold text-[#bd005e] sm:h-28 sm:w-28"
+                      >
+                        @if (business.logoUrl) {
+                          <img
+                            class="object-cover"
+                            [ngSrc]="business.logoUrl"
+                            [alt]="business.name + ' logo'"
+                            fill
+                          />
+                        } @else {
+                          {{ business.name.slice(0, 1).toUpperCase() }}
+                        }
+                      </span>
+                      <div class="pb-2">
+                        <h1 class="text-2xl font-bold sm:text-[28px]">{{ business.name }}</h1>
+                        <p class="flex items-center gap-1 text-sm text-slate-500">
+                          <span class="text-[#bd005e]">●</span
+                          >{{ business.city || business.address || business.category }}
+                        </p>
+                        @if (business.verificationStatus === 'verified') {
+                          <span class="text-xs font-semibold text-green-700"
+                            >Verified business</span
+                          >
+                        }
+                      </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pb-2">
+                      <button
+                        class="rounded-md border border-[#bd005e] px-5 py-2 text-sm font-semibold text-[#bd005e] disabled:cursor-not-allowed disabled:opacity-50"
+                        [disabled]="
+                          isDemoBusiness(business) || savingBusinessIds().includes(business.id)
+                        "
+                        (click)="toggleSaved(business)"
+                      >
+                        {{
+                          isDemoBusiness(business)
+                            ? 'Sample data'
+                            : isSaved(business.id)
+                              ? 'Saved ✓'
+                              : '☆ Save'
+                        }}
+                      </button>
+                      <button
+                        class="rounded-md border border-[#bd005e] px-5 py-2 text-sm font-semibold text-[#bd005e]"
+                        (click)="openConversation(business)"
+                      >
+                        Message
+                      </button>
+                      @if (business.latitude !== null && business.longitude !== null) {
+                        <a
+                          class="rounded-md border border-slate-300 px-5 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#bd005e] hover:text-[#8d0047]"
+                          [href]="
+                            'https://www.openstreetmap.org/?mlat=' +
+                            business.latitude +
+                            '&mlon=' +
+                            business.longitude +
+                            '#map=18/' +
+                            business.latitude +
+                            '/' +
+                            business.longitude
+                          "
+                          target="_blank"
+                          rel="noreferrer"
+                          >Directions</a
+                        >
+                      }
+                      @if (business.website) {
+                        <a
+                          class="rounded-md bg-[#bd005e] px-5 py-2 text-sm font-semibold text-white"
+                          [href]="business.website"
+                          target="_blank"
+                          rel="noreferrer"
+                          >Visit website</a
+                        >
+                      }
+                    </div>
+                  </div>
+                  @if (business.description) {
+                    <p class="ml-1 mt-5 text-slate-700">{{ business.description }}</p>
+                  }
+                </div>
+              </div>
+              <div class="mt-4 grid gap-5 lg:grid-cols-[1.5fr_0.9fr]">
+                <section class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-7">
+                  <h2 class="font-bold">Business overview</h2>
+                  <p class="mt-5 text-sm text-slate-600">
+                    Discover community posts, save this place, or message the business to learn
+                    more.
+                  </p>
+                  @if (business.address) {
+                    <p class="mt-5 text-sm text-slate-600">{{ business.address }}</p>
+                  }
+                </section>
+                <section class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-7">
+                  <h2 class="text-xl font-bold">Contact</h2>
+                  @if (business.website) {
+                    <a
+                      class="mt-3 block break-all text-sm font-semibold text-[#bd005e] underline"
+                      [href]="business.website"
+                      target="_blank"
+                      rel="noreferrer"
+                      >{{ business.website }}</a
+                    >
+                  } @else {
+                    <p class="mt-3 text-sm text-slate-600">No website has been added.</p>
+                  }
+                </section>
+              </div>
+              <section class="mt-5 rounded-2xl border border-slate-200 bg-white p-5 sm:p-7">
+                <h2 class="text-xl font-bold">Community posts</h2>
+                @for (post of profilePosts(); track post.id) {
+                  <article
+                    class="mt-5 grid gap-4 border-t border-slate-100 pt-5 sm:grid-cols-[200px_1fr]"
+                  >
+                    @if (post.media.length > 0) {
+                      @if (post.media[0].contentType.startsWith('video/')) {
+                        <video
+                          class="max-h-48 w-full rounded-xl bg-slate-100"
+                          [src]="post.media[0].downloadURL"
+                          [attr.aria-label]="post.media[0].altText || 'Business post video'"
+                          controls
+                          preload="metadata"
+                        ></video>
+                      } @else {
+                        <img
+                          class="max-h-48 w-full rounded-xl bg-slate-100 object-cover"
+                          [src]="post.media[0].downloadURL"
+                          [alt]="post.media[0].altText || 'Business post photo'"
+                          loading="lazy"
+                        />
+                      }
+                    }
+                    <div>
+                      <h3 class="font-bold">{{ post.authorDisplayName }}</h3>
+                      <p class="mt-2 whitespace-pre-line text-sm leading-6 text-slate-600">
+                        {{ post.text }}
+                      </p>
+                    </div>
+                  </article>
+                } @empty {
+                  <p class="mt-4 text-sm text-slate-600">
+                    No posts have been tagged with this business yet.
+                  </p>
+                }
+              </section>
+            } @else {
+              @if (signedInUser(); as user) {
+                <section class="rounded-2xl border border-slate-200 bg-white p-6">
+                  <h1 class="text-2xl font-bold">Your profile</h1>
+                  <p class="mt-1 text-sm text-slate-600">{{ user.email || user.phoneNumber }}</p>
+                  <label class="mt-6 block max-w-md text-sm font-semibold"
+                    >Display name<input
+                      class="mt-2 h-11 w-full rounded-lg border border-slate-200 px-3 font-normal"
+                      [value]="profileName() || user.displayName || ''"
+                      (input)="updateProfileName($event)"
+                      maxlength="80"
+                  /></label>
+                  <button
+                    class="mt-4 rounded-lg bg-[#bd005e] px-4 py-2 text-sm font-semibold text-white"
+                    (click)="saveProfile()"
+                    [disabled]="profileSaving()"
+                  >
+                    {{ profileSaving() ? 'Saving…' : 'Save profile' }}
+                  </button>
+                </section>
+              } @else {
+                <div
+                  class="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center"
+                >
+                  <h1 class="text-2xl font-bold">Choose a local business</h1>
+                  <p class="mt-2 text-sm text-slate-600">
+                    Select a place from Explore to view its details and community posts.
+                  </p>
+                  <button
+                    class="mt-4 rounded-lg bg-[#bd005e] px-4 py-2 text-sm font-semibold text-white"
+                    (click)="navigate('map')"
+                  >
+                    Explore places
+                  </button>
+                </div>
+              }
+            }
+          </div>
+        }
+
+        @if (activeView() === 'saved') {
+          <section class="mx-auto max-w-5xl p-5 sm:p-8">
+            <h1 class="text-2xl font-bold">Saved places</h1>
+            <p class="mt-1 text-sm text-slate-500">
+              Keep your favorite local discoveries close by.
+            </p>
+            @if (!signedInUser()) {
+              <div
+                class="mt-6 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center"
+              >
+                <h2 class="font-semibold">Sign in to sync your saved places</h2>
+                <p class="mt-1 text-sm text-slate-500">
+                  Your saved places are private to your account.
+                </p>
+                <button
+                  class="mt-4 rounded-lg bg-[#bd005e] px-4 py-2 text-sm font-semibold text-white"
+                  (click)="openAuthDialog()"
+                >
+                  Sign in
+                </button>
+              </div>
+            } @else if (savedBusinesses().length) {
+              <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                @for (business of savedBusinessList(); track business.id) {
+                  <article class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                    <button
+                      class="relative block h-40 w-full bg-[#edf1ec]"
+                      (click)="openBusiness(business)"
+                      [attr.aria-label]="'Open ' + business.name"
+                    >
+                      @if (business.coverImageUrl) {
+                        <img
+                          class="object-cover"
+                          [ngSrc]="business.coverImageUrl"
+                          [alt]="business.name"
+                          fill
+                        />
+                      }
+                    </button>
+                    <div class="p-4">
+                      <h2 class="font-bold">{{ business.name }}</h2>
+                      <p class="mt-1 text-sm text-slate-500">
+                        {{ business.category
+                        }}<span>{{ business.city ? ' · ' + business.city : '' }}</span>
+                      </p>
+                      <button
+                        class="mt-3 text-sm font-semibold text-[#bd005e] disabled:opacity-50"
+                        [disabled]="savingBusinessIds().includes(business.id)"
+                        (click)="toggleSaved(business)"
+                      >
+                        Remove from saved
+                      </button>
+                    </div>
+                  </article>
+                }
+              </div>
+            } @else {
+              <div
+                class="mt-6 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center"
+              >
+                <span class="text-4xl text-[#bd005e]" aria-hidden="true">♡</span>
+                <h2 class="mt-3 font-semibold">Your saved places will show up here</h2>
+                <p class="mt-1 text-sm text-slate-500">
+                  Explore Iloilo and save a place for later.
+                </p>
+                <button
+                  class="mt-4 rounded-lg bg-[#bd005e] px-4 py-2 text-sm font-semibold text-white"
+                  (click)="navigate('map')"
+                >
+                  Explore the map
+                </button>
+              </div>
+            }
+          </section>
+        }
+      </main>
+      <nav
+        aria-label="Mobile bottom navigation"
+        class="sticky bottom-0 z-20 grid grid-cols-5 border-t border-[#eee8e4] bg-white/95 px-2 py-2 shadow-[0_-5px_18px_rgba(29,45,81,0.04)] backdrop-blur lg:hidden"
+      >
+        <button
+          class="flex flex-col items-center gap-1 py-1 text-[10px]"
+          [class.text-[#bd005e]]="activeView() === 'home'"
+          (click)="navigate('home')"
+        >
+          <span class="text-lg">⌂</span>Home
+        </button>
+        <button
+          class="flex flex-col items-center gap-1 py-1 text-[10px]"
+          [class.text-[#bd005e]]="activeView() === 'map'"
+          (click)="navigate('map')"
+        >
+          <span class="text-lg">⌖</span>Explore
+        </button>
+        <button
+          class="flex flex-col items-center gap-1 py-1 text-[10px]"
+          [class.text-[#bd005e]]="activeView() === 'chats'"
+          (click)="navigate('chats')"
+        >
+          <span class="text-lg">▢</span>Activity
+        </button>
+        <button
+          class="flex flex-col items-center gap-1 py-1 text-[10px]"
+          [class.text-[#bd005e]]="activeView() === 'saved'"
+          (click)="navigate('saved')"
+        >
+          <span class="text-lg">♧</span>Saved
+        </button>
+        <button
+          class="flex flex-col items-center gap-1 py-1 text-[10px]"
+          [class.text-[#bd005e]]="activeView() === 'profile'"
+          (click)="navigate('profile')"
+        >
+          <span class="text-lg">♙</span>Profile
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  @if (activeDialog() === 'share' || activeDialog() === 'merchants') {
+    <div
+      class="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-[#172647]/80 p-4"
+      (click)="closeDialog()"
+      (keydown.escape)="closeDialog()"
+    >
+      @if (activeDialog() === 'share') {
+        <form
+          class="my-auto w-full max-w-[680px] rounded-[28px] border border-white/50 bg-white p-5 shadow-[0_30px_100px_rgba(10,20,40,0.32)] sm:p-8"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="share-title"
+          (click)="$event.stopPropagation()"
+          (submit)="publishPost($event)"
+        >
+          <div class="flex items-center justify-between gap-3">
+            <h2 id="share-title" class="text-2xl font-bold text-slate-950 sm:text-[28px]">
+              Share a food discovery
+            </h2>
+            <button
+              type="button"
+              class="grid h-9 w-9 place-items-center rounded-full text-xl text-slate-500 hover:bg-slate-100 disabled:opacity-50"
+              aria-label="Close"
+              [disabled]="isPublishing()"
+              (click)="closeDialog()"
+            >
+              ×
+            </button>
+          </div>
+          <div class="mt-5 flex items-center gap-4">
+            <span
+              class="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-full bg-[#fff0f5] font-semibold text-[#bd005e]"
+            >
+              @if (signedInUser()?.photoURL) {
+                <img class="h-full w-full object-cover" [src]="signedInUser()?.photoURL" alt="" />
+              } @else {
+                {{
+                  (signedInUser()?.displayName || signedInUser()?.email || 'L')
+                    .slice(0, 1)
+                    .toUpperCase()
+                }}
+              }
+            </span>
+            <p class="font-bold">
+              {{ signedInUser()?.displayName || signedInUser()?.email || 'Lakvay Explorer' }}
+            </p>
+          </div>
+          <label for="discovery-text" class="mt-5 block text-xl font-medium text-slate-950"
+            >What did you discover today?</label
+          >
+          <div class="relative mt-3">
+            <textarea
+              id="discovery-text"
+              class="h-36 w-full resize-none rounded-2xl border border-[#e8ddd6] bg-[#faf8f6] p-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-[#bd005e] focus:bg-white focus:ring-4 focus:ring-[#bd005e]/10"
+              maxlength="300"
+              placeholder="Share a restaurant, dish, drink or a place you loved..."
+              [value]="postText()"
+              (input)="updatePostText($event)"
+            ></textarea>
+            <span class="absolute bottom-3 right-3 text-[10px] text-slate-500"
+              >{{ postText().length }}/300</span
+            >
+          </div>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <button
+              type="button"
+              class="rounded-full border border-slate-300 px-4 py-2 text-sm font-medium hover:bg-slate-50"
+              (click)="activeDialog.set('merchants')"
+            >
+              <span class="mr-2 text-[#bd005e]">▦</span
+              >{{ selectedPostBusiness()?.name || 'Tag a place' }}
+            </button>
+            <button
+              type="button"
+              class="rounded-full border border-slate-300 px-4 py-2 text-sm font-medium hover:bg-slate-50"
+              (click)="openTagLocation()"
+            >
+              <span class="mr-2 text-[#bd005e]">⌖</span>Tag Location
+            </button>
+          </div>
+          <div class="mt-5 flex flex-wrap items-start gap-4">
+            <label
+              class="flex h-28 w-28 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#d9c8bd] bg-[#faf8f6] text-center text-sm text-slate-700 transition hover:border-[#bd005e] hover:bg-[#fff4f8]"
+            >
+              <span class="text-3xl text-[#bd005e]" aria-hidden="true">▧</span>
+              Add photo/video
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"
+                class="sr-only"
+                aria-label="Add photo or video to your discovery"
+                (change)="selectMedia($event)"
+              />
+            </label>
+            @if (mediaPreviewUrl()) {
+              <div class="relative h-28 w-28 overflow-hidden rounded-lg bg-slate-100">
+                @if (selectedFile()?.type?.startsWith('video/')) {
+                  <video
+                    class="h-full w-full object-cover"
+                    [src]="mediaPreviewUrl()"
+                    aria-label="Selected video preview"
+                    controls
+                  ></video>
+                } @else {
+                  <img
+                    class="h-full w-full object-cover"
+                    [src]="mediaPreviewUrl()"
+                    alt="Selected post preview"
+                  />
+                }
+                <button
+                  type="button"
+                  class="absolute right-1 top-1 grid h-7 w-7 place-items-center rounded-full bg-white text-lg text-slate-700 shadow"
+                  aria-label="Remove selected media"
+                  (click)="clearSelectedFile()"
+                >
+                  ×
+                </button>
+              </div>
+            }
+          </div>
+          @if (backendError()) {
+            <p class="mt-3 text-sm text-red-700" role="alert">{{ backendError() }}</p>
+          }
+          @if (uploadProgress() !== null) {
+            <label class="mt-3 block text-xs text-slate-600" for="post-upload-progress"
+              >Uploading {{ uploadProgress() }}%</label
+            >
+            <progress
+              id="post-upload-progress"
+              class="mt-1 w-full accent-[#bd005e]"
+              [value]="uploadProgress()!"
+              max="100"
+            ></progress>
+          }
+          <div class="mt-5 flex items-center justify-end border-t border-slate-200 pt-4">
+            <button
+              type="submit"
+              [disabled]="!postText().trim() || isPublishing()"
+              class="rounded-xl bg-[#1d2d51] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#293d68] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {{ isPublishing() ? 'Publishing…' : 'Post' }}
+            </button>
+          </div>
+        </form>
+      }
+      @if (activeDialog() === 'merchants') {
+        <section
+          class="my-auto min-h-[420px] w-full max-w-[620px] rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl sm:min-h-[600px] sm:p-9"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="merchant-picker-title"
+          (click)="$event.stopPropagation()"
+        >
+          <div class="flex items-center gap-4">
+            <button
+              type="button"
+              class="grid h-9 w-9 place-items-center rounded-full bg-amber-300 text-xl text-amber-900"
+              aria-label="Back to post"
+              (click)="activeDialog.set('share')"
+            >
+              ←
+            </button>
+            <h2 id="merchant-picker-title" class="text-2xl font-bold text-slate-950">
+              Tag Merchant
+            </h2>
+          </div>
+          <label
+            class="mt-5 flex h-11 items-center gap-3 rounded-full border border-slate-300 px-4"
+          >
+            <svg
+              aria-hidden="true"
+              class="h-4 w-4 text-slate-500"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-4-4" />
+            </svg>
+            <span class="sr-only">Search saved places</span>
+            <input
+              class="w-full bg-transparent text-sm outline-none"
+              placeholder="Tag places that you saved"
+            />
+          </label>
+          @for (business of realBusinesses(); track business.id) {
+            <button
+              type="button"
+              class="mt-3 flex w-full items-center gap-4 rounded-2xl border border-slate-200 bg-[#edf2ec] p-3 text-left transition hover:border-[#bd005e]"
+              (click)="selectPostBusiness(business)"
+            >
+              <span
+                class="relative grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-full bg-white font-semibold text-[#bd005e]"
+              >
+                @if (business.logoUrl) {
+                  <img
+                    class="object-cover"
+                    [ngSrc]="business.logoUrl"
+                    [alt]="business.name + ' logo'"
+                    fill
+                  />
+                } @else {
+                  {{ business.name.slice(0, 1).toUpperCase() }}
+                }
+              </span>
+              <span class="text-lg font-bold">{{ business.name }}</span>
+              <span class="ml-auto text-xs text-slate-600">{{ business.category }}</span>
+            </button>
+          } @empty {
+            <p class="mt-6 text-sm text-slate-600">No published places are available to tag.</p>
+          }
+        </section>
+      }
+    </div>
+  }
+  @if (activeDialog() === 'auth') {
+    <app-auth-dialog
+      [accountType]="merchantAuthPending() ? 'merchant' : 'consumer'"
+      (authenticated)="onAuthDialogAuthenticated()"
+      (closed)="onAuthDialogClosed()"
+    />
+  }
+  @if (activeDialog() === 'onboarding') {
+    <app-consumer-onboarding
+      (closed)="onOnboardingClosed()"
+      (completed)="onOnboardingClosed()"
+    />
+  }
+  @if (activeDialog() === 'business-dashboard') {
+    <app-merchant-dashboard (closed)="activeDialog.set(null)" />
+  }
+
+  @if (toast()) {
+    <div
+      role="status"
+      class="fixed bottom-20 left-1/2 z-[60] -translate-x-1/2 rounded-xl bg-slate-900 px-5 py-3 text-center text-sm font-medium text-white shadow-lg lg:bottom-6"
+    >
+      {{ toast() }}
+    </div>
+  }
+</div>

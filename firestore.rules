@@ -1,0 +1,294 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function owns(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function merchantOwner(uid) {
+      return owns(uid)
+        && exists(/databases/$(database)/documents/users/$(uid))
+        && get(/databases/$(database)/documents/users/$(uid)).data.accountType == 'merchant'
+        && get(/databases/$(database)/documents/users/$(uid)).data.status == 'active';
+    }
+
+    function publishedBusiness(businessId, businessName) {
+      return businessId == '' && businessName == ''
+        || (
+          exists(/databases/$(database)/documents/businesses/$(businessId))
+          && get(/databases/$(database)/documents/businesses/$(businessId)).data.publicationStatus == 'published'
+          && get(/databases/$(database)/documents/businesses/$(businessId)).data.name == businessName
+        );
+    }
+
+    function validPostMedia(media, uid, postId) {
+      return media is list
+        && media.size() <= 1
+        && (
+          media.size() == 0
+          || (
+            media[0] is map
+            && media[0].keys().hasOnly(['storagePath', 'downloadURL', 'contentType', 'size', 'altText'])
+            && media[0].storagePath is string
+            && media[0].storagePath.matches('post-media/' + uid + '/' + postId + '/[^/]+')
+            && media[0].downloadURL is string
+            && media[0].contentType in ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/webm']
+            && media[0].size is int
+            && media[0].size > 0
+            && media[0].altText is string
+            && media[0].altText.size() <= 200
+          )
+        );
+    }
+
+    match /users/{uid} {
+      allow read: if owns(uid);
+      allow create: if owns(uid)
+        && request.resource.data.keys().hasOnly([
+          'uid', 'displayName', 'email', 'photoURL', 'accountType', 'status', 'createdAt', 'updatedAt',
+          'consumerAnswers', 'consumerOnboardingCompleted'
+        ])
+        && request.resource.data.uid == uid
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() > 0
+        && request.resource.data.displayName.size() <= 80
+        && request.resource.data.accountType in ['consumer', 'merchant']
+        && request.resource.data.status == 'active'
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if owns(uid)
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly([
+            'displayName', 'email', 'photoURL', 'updatedAt',
+            'consumerAnswers', 'consumerOnboardingCompleted'
+          ])
+        && (
+          !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+            'consumerAnswers', 'consumerOnboardingCompleted'
+          ])
+          || request.resource.data.accountType == 'consumer'
+        )
+        && (!request.resource.data.keys().hasAny([
+          'consumerAnswers', 'consumerOnboardingCompleted'
+        ]) || (
+          request.resource.data.consumerAnswers is map
+          && request.resource.data.consumerAnswers.keys().hasOnly([
+            'food', 'experience', 'flavor', 'discovery', 'priority'
+          ])
+          && (!request.resource.data.consumerAnswers.keys().hasAny(['food'])
+            || request.resource.data.consumerAnswers.food is list)
+          && (!request.resource.data.consumerAnswers.keys().hasAny(['experience'])
+            || request.resource.data.consumerAnswers.experience is list)
+          && (!request.resource.data.consumerAnswers.keys().hasAny(['flavor'])
+            || request.resource.data.consumerAnswers.flavor is list)
+          && (!request.resource.data.consumerAnswers.keys().hasAny(['discovery'])
+            || request.resource.data.consumerAnswers.discovery is list)
+          && (!request.resource.data.consumerAnswers.keys().hasAny(['priority'])
+            || request.resource.data.consumerAnswers.priority is list)
+          && request.resource.data.consumerOnboardingCompleted is bool
+          && (
+            request.resource.data.consumerOnboardingCompleted == false
+            || request.resource.data.consumerAnswers.keys().hasAll([
+              'food', 'experience', 'flavor', 'discovery', 'priority'
+            ])
+          )
+        ))
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+
+      match /savedBusinesses/{businessId} {
+        allow read: if owns(uid);
+        allow create: if owns(uid)
+          && request.resource.data.keys().hasOnly(['createdAt'])
+          && request.resource.data.createdAt == request.time
+          ;
+        allow delete: if owns(uid);
+        allow update: if false;
+      }
+    }
+
+    match /businesses/{businessId} {
+      function validBusinessSubmission() {
+        return request.resource.data.keys().hasOnly([
+          'ownerUid', 'name', 'category', 'description', 'city', 'address',
+          'latitude', 'longitude', 'website', 'coverImageUrl', 'coverImagePath',
+          'logoUrl', 'averageRating', 'reviewCount', 'verificationStatus',
+          'publicationStatus', 'createdAt', 'updatedAt'
+        ])
+          && request.resource.data.keys().hasAll([
+            'ownerUid', 'name', 'category', 'description', 'city', 'address',
+            'latitude', 'longitude', 'website', 'coverImageUrl', 'coverImagePath',
+            'logoUrl', 'averageRating', 'reviewCount', 'verificationStatus',
+            'publicationStatus', 'createdAt', 'updatedAt'
+          ])
+          && request.resource.data.ownerUid == request.auth.uid
+          && request.resource.data.name is string
+          && request.resource.data.name.size() >= 2
+          && request.resource.data.name.size() <= 100
+          && request.resource.data.category is string
+          && request.resource.data.category.size() >= 2
+          && request.resource.data.category.size() <= 60
+          && request.resource.data.description is string
+          && request.resource.data.description.size() <= 1000
+          && request.resource.data.city is string
+          && request.resource.data.city.size() > 0
+          && request.resource.data.city.size() <= 80
+          && request.resource.data.address is string
+          && request.resource.data.address.size() >= 2
+          && request.resource.data.address.size() <= 200
+          && request.resource.data.latitude is number
+          && request.resource.data.latitude >= -90
+          && request.resource.data.latitude <= 90
+          && request.resource.data.longitude is number
+          && request.resource.data.longitude >= -180
+          && request.resource.data.longitude <= 180
+          && request.resource.data.website is string
+          && request.resource.data.website.size() <= 300
+          && request.resource.data.coverImageUrl == ''
+          && request.resource.data.coverImagePath == ''
+          && request.resource.data.logoUrl == ''
+          && request.resource.data.averageRating == null
+          && request.resource.data.reviewCount == 0
+          && request.resource.data.verificationStatus == 'self-published'
+          && request.resource.data.publicationStatus == 'published'
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.updatedAt == request.time;
+      }
+
+      allow read: if resource.data.publicationStatus == 'published'
+        || (signedIn() && resource.data.ownerUid == request.auth.uid);
+      allow create: if merchantOwner(request.resource.data.ownerUid)
+        && validBusinessSubmission();
+      allow update: if merchantOwner(resource.data.ownerUid)
+        && request.resource.data.ownerUid == resource.data.ownerUid
+        && request.resource.data.publicationStatus == 'published'
+        && request.resource.data.verificationStatus == 'self-published'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'name', 'category', 'description', 'city', 'address', 'latitude', 'longitude',
+          'website', 'updatedAt'
+        ])
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if merchantOwner(resource.data.ownerUid);
+    }
+
+    match /posts/{postId} {
+      allow read: if resource.data.status == 'published'
+        && resource.data.visibility == 'public';
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly([
+          'postId', 'authorUid', 'authorDisplayName', 'authorPhotoURL',
+          'businessId', 'businessName', 'text', 'media', 'visibility',
+          'status', 'likeCount', 'commentCount', 'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.postId == postId
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.authorDisplayName is string
+        && request.resource.data.authorDisplayName.size() > 0
+        && request.resource.data.authorDisplayName.size() <= 80
+        && request.resource.data.authorPhotoURL is string
+        && request.resource.data.businessId is string
+        && request.resource.data.businessName is string
+        && publishedBusiness(request.resource.data.businessId, request.resource.data.businessName)
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 300
+        && validPostMedia(request.resource.data.media, request.auth.uid, postId)
+        && request.resource.data.visibility == 'public'
+        && request.resource.data.status == 'published'
+        && request.resource.data.likeCount == 0
+        && request.resource.data.commentCount == 0
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if false;
+      allow delete: if owns(resource.data.authorUid);
+      match /likes/{uid} {
+        allow read: if true;
+        allow create: if owns(uid)
+          && request.resource.data.keys().hasOnly(['uid', 'createdAt'])
+          && request.resource.data.uid == uid
+          && request.resource.data.createdAt == request.time;
+        allow delete: if owns(uid);
+        allow update: if false;
+      }
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if signedIn()
+          && request.resource.data.keys().hasOnly(['authorUid', 'authorName', 'text', 'createdAt'])
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.authorName is string
+          && request.resource.data.authorName.size() > 0
+          && request.resource.data.authorName.size() <= 80
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 500
+          && request.resource.data.createdAt == request.time;
+        allow update, delete: if owns(resource.data.authorUid);
+      }
+    }
+
+    match /conversations/{conversationId} {
+      function participant() {
+        return signedIn()
+          && request.auth.uid in get(/databases/$(database)/documents/conversations/$(conversationId)).data.participantUids;
+      }
+      function conversationParticipant() {
+        return signedIn()
+          && request.auth.uid in resource.data.participantUids;
+      }
+      allow read: if conversationParticipant();
+      allow create: if signedIn()
+        && request.resource.data.participantUids is list
+        && request.auth.uid in request.resource.data.participantUids
+        && request.resource.data.participantUids.size() == 2;
+      allow update: if conversationParticipant()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastMessage', 'updatedAt'])
+        && request.resource.data.lastMessage is string
+        && request.resource.data.lastMessage.size() <= 1000
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+      match /messages/{messageId} {
+        allow read: if participant();
+        allow create: if participant()
+          && request.resource.data.keys().hasOnly(['senderUid', 'text', 'createdAt'])
+          && request.resource.data.senderUid == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 1000
+          && request.resource.data.createdAt == request.time;
+        allow update, delete: if false;
+      }
+    }
+
+    match /businesses/{businessId}/reviews/{reviewId} {
+      allow read: if true;
+      allow create, update: if owns(reviewId)
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.authorName is string
+        && request.resource.data.authorName.size() > 0
+        && request.resource.data.authorName.size() <= 80
+        && request.resource.data.rating is int
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5
+        && request.resource.data.text is string
+        && request.resource.data.text.size() <= 1000;
+      allow delete: if owns(reviewId);
+    }
+
+    match /users/{uid}/notifications/{notificationId} {
+      allow read: if owns(uid);
+      allow update: if owns(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read'])
+        && request.resource.data.read is bool;
+      allow create, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

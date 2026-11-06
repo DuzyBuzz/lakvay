@@ -1,0 +1,256 @@
+<div
+  class="fixed inset-0 z-[70] grid place-items-center overflow-y-auto bg-[#15213a]/75 p-3 backdrop-blur-md sm:p-6"
+  (click)="close()"
+  (keydown.escape)="close()"
+>
+  <section
+    class="relative my-auto grid w-full max-w-[920px] overflow-hidden rounded-[28px] border border-white/50 bg-white shadow-[0_30px_100px_rgba(10,20,40,0.32)] md:min-h-[600px] md:grid-cols-2"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="auth-title"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="relative hidden overflow-hidden bg-[#f5e8df] md:block">
+      <picture class="absolute inset-0">
+        <source media="(min-width: 768px)" srcset="/assets/lakvaylogo-96.png" />
+        <img
+          class="object-cover"
+          ngSrc="/assets/auth-background.png"
+          alt=""
+          fill
+          priority
+        />
+      </picture>
+      <div class="absolute inset-0 bg-gradient-to-t from-[#fff8f2]/95 via-[#fff8f2]/10 to-transparent"></div>
+      <div class="absolute inset-x-5 bottom-6 flex justify-center">
+        <img
+          class="h-auto w-40 drop-shadow-sm"
+          ngSrc="/assets/lakvaysublogo-296.png"
+          alt="Lakvay — Navigate Flavors. Discover Iloilo."
+          width="1962"
+          height="450"
+        />
+      </div>
+    </div>
+
+    <div class="relative flex flex-col justify-center p-6 sm:p-9 md:px-11">
+      <button
+        type="button"
+        class="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full text-2xl leading-none text-slate-400 transition hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d2d51]"
+        aria-label="Close sign in"
+        (click)="close()"
+      >×</button>
+
+      <div class="mb-5 flex items-center gap-3 md:hidden">
+        <img
+          class="h-11 w-11 object-contain"
+          ngSrc="/assets/lakvaylogo-96.png"
+          alt=""
+          width="1254"
+          height="1254"
+        />
+        <img
+          class="h-auto w-32"
+          ngSrc="/assets/lakvaysublogo-296.png"
+          alt="Lakvay — Navigate Flavors. Discover Iloilo."
+          width="1962"
+          height="450"
+        />
+      </div>
+
+      <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#bd005e]">
+        {{ accountType() === 'merchant' ? 'Lakvay merchant access' : 'Your Lakvay account' }}
+      </p>
+      <h1 id="auth-title" class="mt-2 font-serif text-3xl font-semibold tracking-tight text-[#1d2d51] sm:text-[34px]">
+        {{ mode() === 'sign-in' ? 'Welcome back.' : accountType() === 'merchant' ? 'List your place.' : 'Create your account.' }}
+      </h1>
+      <p class="mt-2 text-sm leading-6 text-slate-600">
+        {{
+          accountType() === 'merchant'
+            ? 'Use a separate merchant account to manage and publish your places.'
+            : 'Sign in to view place details and keep your local discoveries close.'
+        }}
+      </p>
+
+      @if (!isConfigured) {
+        <p class="mt-5 rounded-xl border border-[#e8d7bd] bg-[#fff9ef] p-3.5 text-xs leading-5 text-[#684d2a]" role="status">
+          Firebase is not configured yet. Add the web app configuration and enable the providers in Firebase Console to sign in.
+        </p>
+      }
+
+      <button
+        type="button"
+        class="mt-6 flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-[#e7e1dc] bg-white text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-[#faf8f6] hover:shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d2d51] disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="busy() || !isConfigured"
+        (click)="signInWithGoogle()"
+      >
+        <svg aria-hidden="true" class="h-5 w-5" viewBox="0 0 48 48">
+          <path fill="#FFC107" d="M43.6 24.5c0-1.4-.1-2.9-.4-4.3H24v8.1h11a9.4 9.4 0 0 1-4.1 6.2v5.2h6.7c3.9-3.6 6-8.9 6-15.2Z" />
+          <path fill="#FF3D00" d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.7-5.2c-1.8 1.2-4.1 2-6.8 2-5.2 0-9.7-3.5-11.3-8.2H5.8v5.3A20 20 0 0 0 24 44Z" />
+          <path fill="#4CAF50" d="M12.7 27.7a12 12 0 0 1 0-7.4V15H5.8a20 20 0 0 0 0 18Z" />
+          <path fill="#1976D2" d="M24 12.1c3 0 5.6 1 7.7 3.1l5.8-5.8C34 5.9 29.5 4 24 4A20 20 0 0 0 5.8 15l6.9 5.3c1.6-4.7 6.1-8.2 11.3-8.2Z" />
+        </svg>
+        {{ busy() ? 'Please wait…' : 'Continue with Google' }}
+      </button>
+      <button
+        type="button"
+        class="mt-3 flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-[#1877f2] text-sm font-semibold text-white shadow-sm transition hover:bg-[#166fe5] hover:shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d2d51] disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="busy() || !isConfigured"
+        (click)="signInWithFacebook()"
+      >
+        <svg aria-hidden="true" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.6 1.7-1.6h1.8V3.8c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3V10H7.5v3h2.8v8h3.2Z" />
+        </svg>
+        {{ busy() ? 'Please wait…' : 'Continue with Facebook' }}
+      </button>
+
+      <div class="my-5 flex items-center gap-3 text-[9px] font-semibold uppercase tracking-[0.15em] text-slate-400">
+        <span class="h-px flex-1 bg-[#f0e2dc]"></span>or continue with<span class="h-px flex-1 bg-[#f0e2dc]"></span>
+      </div>
+
+      <div class="grid grid-cols-2 rounded-xl border border-[#eee7e2] bg-[#f8f6f4] p-1">
+        <button
+          type="button"
+          class="flex h-10 items-center justify-center gap-2 rounded-lg text-xs font-semibold transition"
+          [class.bg-white]="method() === 'email'"
+          [class.text-[#bd005e]]="method() === 'email'"
+          [class.shadow-sm]="method() === 'email'"
+          [attr.aria-pressed]="method() === 'email'"
+          (click)="setMethod('email')"
+        >✉ <span>Email</span></button>
+        <button
+          type="button"
+          class="flex h-10 items-center justify-center gap-2 rounded-lg text-xs font-semibold transition"
+          [class.bg-white]="method() === 'phone'"
+          [class.text-[#bd005e]]="method() === 'phone'"
+          [class.shadow-sm]="method() === 'phone'"
+          [attr.aria-pressed]="method() === 'phone'"
+          (click)="setMethod('phone')"
+        >☎ <span>Phone</span></button>
+      </div>
+
+      @if (method() === 'email') {
+        <div class="mt-5 grid grid-cols-2 border-b border-[#eee7e2] text-center text-xs">
+          <button
+            type="button"
+            class="border-b-2 py-3 font-semibold transition"
+            [class.border-[#bd005e]]="mode() === 'sign-in'"
+            [class.text-[#bd005e]]="mode() === 'sign-in'"
+            [class.border-transparent]="mode() !== 'sign-in'"
+            [attr.aria-pressed]="mode() === 'sign-in'"
+            (click)="setMode('sign-in')"
+          >Sign in</button>
+          <button
+            type="button"
+            class="border-b-2 py-3 font-semibold transition"
+            [class.border-[#bd005e]]="mode() === 'create-account'"
+            [class.text-[#bd005e]]="mode() === 'create-account'"
+            [class.border-transparent]="mode() !== 'create-account'"
+            [attr.aria-pressed]="mode() === 'create-account'"
+            (click)="setMode('create-account')"
+          >Create account</button>
+        </div>
+
+        <form class="mt-4 space-y-3.5" (submit)="submitEmail($event)">
+          @if (mode() === 'create-account') {
+            <label class="block text-[10px] font-semibold text-slate-700" for="auth-display-name">Name
+              <input
+                id="auth-display-name"
+                class="mt-1 h-10 w-full rounded-lg border border-[#e7d8d1] px-3 text-xs font-normal outline-none placeholder:text-slate-400 focus:border-[#bd005e] focus:ring-2 focus:ring-[#bd005e]/15"
+                name="displayName"
+                autocomplete="name"
+                minlength="2"
+                maxlength="80"
+                placeholder="Your name"
+                required
+              />
+            </label>
+          }
+          <label class="block text-xs font-semibold text-slate-700" for="auth-email">Email address
+            <input
+              id="auth-email"
+              class="mt-1.5 h-12 w-full rounded-xl border border-[#e7e1dc] bg-[#faf8f6] px-4 text-sm font-normal outline-none transition placeholder:text-slate-400 focus:border-[#bd005e] focus:bg-white focus:ring-4 focus:ring-[#bd005e]/10"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              required
+            />
+          </label>
+          <label class="block text-xs font-semibold text-slate-700" for="auth-password">Password
+            <input
+              id="auth-password"
+              class="mt-1.5 h-12 w-full rounded-xl border border-[#e7e1dc] bg-[#faf8f6] px-4 text-sm font-normal outline-none transition placeholder:text-slate-400 focus:border-[#bd005e] focus:bg-white focus:ring-4 focus:ring-[#bd005e]/10"
+              name="password"
+              type="password"
+              [attr.autocomplete]="mode() === 'create-account' ? 'new-password' : 'current-password'"
+              minlength="6"
+              placeholder="At least 6 characters"
+              required
+            />
+          </label>
+          <button
+            type="submit"
+            class="mt-1 h-12 w-full rounded-xl bg-[#1d2d51] text-sm font-semibold text-white shadow-md shadow-[#1d2d51]/15 transition hover:-translate-y-0.5 hover:bg-[#293d68] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d2d51] disabled:cursor-not-allowed disabled:opacity-50"
+            [disabled]="busy() || !isConfigured"
+          >
+            {{ busy() ? 'Please wait…' : mode() === 'create-account' ? 'Create account with email' : 'Sign in with email' }}
+          </button>
+        </form>
+      } @else {
+        @if (!verificationSent()) {
+          <form class="mt-5 space-y-4" (submit)="requestPhoneCode($event)">
+            <label class="block text-xs font-semibold text-slate-700" for="auth-phone">Phone number
+              <input
+                id="auth-phone"
+                class="mt-1.5 h-12 w-full rounded-xl border border-[#e7e1dc] bg-[#faf8f6] px-4 text-sm font-normal outline-none transition placeholder:text-slate-400 focus:border-[#bd005e] focus:bg-white focus:ring-4 focus:ring-[#bd005e]/10"
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                inputmode="tel"
+                pattern="\\+[1-9][0-9]{7,14}"
+                placeholder="+639171234567"
+                aria-describedby="phone-help"
+                required
+              />
+            </label>
+            <p id="phone-help" class="text-xs leading-5 text-slate-500">Use international format, including the + country code. We’ll text a verification code.</p>
+            <button type="submit" class="h-12 w-full rounded-xl bg-[#1d2d51] text-sm font-semibold text-white shadow-md transition hover:bg-[#293d68] disabled:opacity-50" [disabled]="busy() || !isConfigured">
+              {{ busy() ? 'Sending code…' : 'Send verification code' }}
+            </button>
+          </form>
+        } @else {
+          <form class="mt-5 space-y-4" (submit)="confirmPhoneCode($event)">
+            <label class="block text-xs font-semibold text-slate-700" for="auth-verification-code">Verification code
+              <input
+                id="auth-verification-code"
+                class="mt-1.5 h-12 w-full rounded-xl border border-[#e7e1dc] bg-[#faf8f6] px-4 text-sm font-normal tracking-[0.3em] outline-none transition placeholder:text-slate-400 focus:border-[#bd005e] focus:bg-white focus:ring-4 focus:ring-[#bd005e]/10"
+                name="verificationCode"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                minlength="6"
+                maxlength="6"
+                placeholder="123456"
+                required
+              />
+            </label>
+            <button type="submit" class="h-12 w-full rounded-xl bg-[#1d2d51] text-sm font-semibold text-white shadow-md transition hover:bg-[#293d68] disabled:opacity-50" [disabled]="busy() || !isConfigured">
+              {{ busy() ? 'Verifying…' : 'Verify and sign in' }}
+            </button>
+            <button type="button" class="w-full py-1 text-xs font-semibold text-[#bd005e] hover:underline" (click)="setMethod('phone')">Use a different phone number</button>
+          </form>
+        }
+      }
+
+      @if (error()) {
+        <p class="mt-4 rounded-xl border border-red-200 bg-red-50 p-3.5 text-xs leading-5 text-red-800" role="alert">{{ error() }}</p>
+      }
+
+      <p class="mt-5 text-center text-[10px] leading-5 text-slate-500">
+        By continuing, you agree to our terms and acknowledge our privacy policy.
+        <span class="block">Phone sign-in requires Firebase phone authentication and SMS verification to be enabled.</span>
+      </p>
+      <div id="recaptcha-container"></div>
+    </div>
+  </section>
+</div>

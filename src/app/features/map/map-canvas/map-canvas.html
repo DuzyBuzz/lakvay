@@ -1,0 +1,11 @@
+<div
+  #mapElement
+  class="relative isolate z-0 h-full min-h-64 w-full overflow-hidden"
+  role="region"
+  tabindex="0"
+  [attr.aria-label]="
+    selectionMode()
+      ? 'Select a business location on the interactive map'
+      : 'Interactive map of published Lakvay businesses'
+  "
+></div>
