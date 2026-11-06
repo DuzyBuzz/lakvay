@@ -68,9 +68,9 @@ ng generate component features/example/example-page
 
 ## Firebase setup
 
-Firebase Authentication, Firestore, and Storage use the modular Firebase SDK. The browser app reads Firebase Web App settings from `src/environments/environment.ts`. Replace those public client settings with the Web App configuration from your Firebase project when connecting a different project. Never put service-account credentials or Admin SDK keys in the browser app.
+Firebase Authentication, Firestore, and Storage use the modular Firebase SDK. The browser app reads Firebase Web App settings from the local, gitignored `src/environments/environment.ts`. Copy `src/environments/environment.example.ts` to that path and fill in the Web App configuration when setting up a local checkout. These browser settings are client identifiers, not server credentials; restrict the Firebase API key by API and application origin in Google Cloud/Firebase Console. Never put service-account credentials or Admin SDK keys in the browser app.
 
-1. Create a Firebase project and register a Web App. Copy its web configuration into `src/environments/environment.ts` if you are not using the project already configured there.
+1. Create a Firebase project and register a Web App. Copy `src/environments/environment.example.ts` to `src/environments/environment.ts`, then fill it with the Web App configuration.
 2. In Firebase Console, enable Google, Email/Password, and Phone under Authentication > Sign-in method. Add the local and production app domains to Authorized domains. Phone sign-in uses reCAPTCHA and may incur SMS quotas or billing.
 3. Create the Firestore database and Storage bucket for the project.
 4. Install/use the Firebase CLI, select your project with `firebase use <your-project-id>`, build the Angular app, then deploy the checked-in Firestore rules, index, Storage rules, and Hosting site:
