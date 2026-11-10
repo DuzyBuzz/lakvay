@@ -64,9 +64,16 @@ service cloud.firestore {
       allow update: if owns(uid)
         && request.resource.data.diff(resource.data).affectedKeys()
           .hasOnly([
-            'displayName', 'email', 'photoURL', 'updatedAt',
+            'displayName', 'email', 'photoURL', 'accountType', 'updatedAt',
             'consumerAnswers', 'consumerOnboardingCompleted'
           ])
+        && (
+          !request.resource.data.diff(resource.data).affectedKeys().hasAny(['accountType'])
+          || (
+            resource.data.accountType == 'consumer'
+            && request.resource.data.accountType == 'merchant'
+          )
+        )
         && (
           !request.resource.data.diff(resource.data).affectedKeys().hasAny([
             'consumerAnswers', 'consumerOnboardingCompleted'

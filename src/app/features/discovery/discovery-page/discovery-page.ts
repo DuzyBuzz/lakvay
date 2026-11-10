@@ -1,8 +1,8 @@
-import { NgOptimizedImage } from '@angular/common';
-import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
+import { DatePipe, NgOptimizedImage } from '@angular/common';
+import { afterNextRender, Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { Auth } from '../../../core/auth';
 import { FirebaseClient } from '../../../core/firebase-client';
-import { DEMO_BUSINESSES } from '../../../data-access/demo-businesses';
+import { DEMO_BUSINESSES, DEMO_POSTS } from '../../../data-access/demo-businesses';
 import { DiscoveryData, PublicBusiness, PublicPost } from '../../../data-access/discovery-data';
 import { MediaStorage } from '../../../data-access/media-storage';
 import {
@@ -13,6 +13,7 @@ import {
 } from '../../../data-access/community-data';
 import { AuthDialog } from '../../auth/auth-dialog/auth-dialog';
 import { MapCanvas } from '../../map/map-canvas/map-canvas';
+import { DirectionsMap } from '../../map/directions-map/directions-map';
 import { MerchantDashboard } from '../../merchants/merchant-dashboard/merchant-dashboard';
 import { ConsumerOnboarding } from '../../onboarding/consumer-onboarding/consumer-onboarding';
 
@@ -20,13 +21,13 @@ type WorkspaceView = 'home' | 'map' | 'chats' | 'saved' | 'profile';
 type DialogView = 'share' | 'merchants' | 'auth' | 'onboarding' | 'business-dashboard' | null;
 
 @Component({
-  imports: [MapCanvas, NgOptimizedImage, AuthDialog, ConsumerOnboarding, MerchantDashboard],
+  imports: [MapCanvas, DirectionsMap, DatePipe, NgOptimizedImage, AuthDialog, ConsumerOnboarding, MerchantDashboard],
   selector: 'app-discovery-page',
   styles: ``,
   templateUrl: './discovery-page.html',
 })
 export class DiscoveryPage {
-  private readonly auth = inject(Auth);
+  protected readonly auth = inject(Auth);
   private readonly firebase = inject(FirebaseClient);
   private readonly discovery = inject(DiscoveryData);
   private readonly mediaStorage = inject(MediaStorage);
@@ -45,6 +46,7 @@ export class DiscoveryPage {
   protected readonly mediaPreviewUrl = signal('');
   protected readonly uploadProgress = signal<number | null>(null);
   protected readonly selectedBusiness = signal<PublicBusiness | null>(null);
+  protected readonly directionsOpen = signal(false);
   protected readonly selectedPostBusiness = signal<PublicBusiness | null>(null);
   protected readonly savedBusinesses = signal<string[]>([]);
   protected readonly savingBusinessIds = signal<string[]>([]);
@@ -65,6 +67,9 @@ export class DiscoveryPage {
   protected readonly openChatIds = signal<string[]>([]);
   protected readonly notifications = signal<NotificationItem[]>([]);
   protected readonly notificationsOpen = signal(false);
+  protected readonly profileMenuOpen = signal(false);
+  protected readonly locationLabel = signal('Iloilo City');
+  protected readonly locating = signal(false);
   protected readonly profileName = signal('');
   protected readonly profileSaving = signal(false);
   protected readonly darkTheme = signal(false);
@@ -72,6 +77,29 @@ export class DiscoveryPage {
   protected readonly commentPostId = signal<string | null>(null);
   protected readonly commentText = signal('');
   protected readonly signedInUser = this.auth.user;
+  protected readonly staticNotifications: NotificationItem[] = [
+    {
+      id: 'static-welcome',
+      title: 'Welcome to Lakvay',
+      body: 'Discover local places, save favorites, and share your Iloilo food finds.',
+      read: false,
+      createdAt: null,
+    },
+    {
+      id: 'static-explore',
+      title: 'New places to explore',
+      body: 'Fresh curated spots are waiting in Explore Iloilo.',
+      read: false,
+      createdAt: null,
+    },
+    {
+      id: 'static-profile',
+      title: 'Complete your Lakvay profile',
+      body: 'Answer the food personality questions to get better recommendations.',
+      read: false,
+      createdAt: null,
+    },
+  ];
 
   protected readonly categories = computed(() => [
     'All',
@@ -126,14 +154,14 @@ export class DiscoveryPage {
   protected readonly collections = [
     {
       title: 'Date Night Favorites',
-      category: 'Restaurants',
+      category: 'Casual dining',
       image:
         'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=480&q=80',
       tint: 'bg-[#f0e9e6]',
     },
     {
       title: 'Local Favorites',
-      category: 'Local favorites',
+      category: 'Markets & shops',
       image:
         'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=480&q=80',
       tint: 'bg-[#fff0c6]',
@@ -147,14 +175,14 @@ export class DiscoveryPage {
     },
     {
       title: 'Sunset Eats',
-      category: 'Restaurants',
+      category: 'Bars & Pubs',
       image:
         'https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=480&q=80',
       tint: 'bg-[#f3e9df]',
     },
     {
       title: 'Bar Hopping',
-      category: 'Coffee & cafés',
+      category: 'Bars & Pubs',
       image:
         'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=480&q=80',
       tint: 'bg-[#f0e9e6]',
@@ -167,6 +195,7 @@ export class DiscoveryPage {
     let stopBusinesses = () => {};
     let stopPosts = () => {};
     this.setBusinesses(DEMO_BUSINESSES);
+    this.posts.set(DEMO_POSTS);
     this.businessesLoading.set(false);
     if (this.firebaseConfigured) {
       stopBusinesses = this.discovery.watchPublicBusinesses(
@@ -175,13 +204,11 @@ export class DiscoveryPage {
       );
       stopPosts = this.discovery.watchPublicPosts(
         (posts) => {
-          this.posts.set(posts);
+          this.posts.set([...DEMO_POSTS, ...posts]);
           this.postsLoading.set(false);
         },
         (error) => {
-          this.backendError.set(
-            this.backendErrorMessage(error, 'Unable to load community discoveries.'),
-          );
+          this.posts.set(DEMO_POSTS);
           this.postsLoading.set(false);
         },
       );
@@ -214,7 +241,7 @@ export class DiscoveryPage {
       const uid = this.signedInUser()?.uid;
       if (!uid || !this.firebaseConfigured) {
         this.conversations.set([]);
-        this.notifications.set([]);
+        this.notifications.set(this.staticNotifications);
         return;
       }
       const stopConversations = this.community.watchConversations(
@@ -224,7 +251,8 @@ export class DiscoveryPage {
       );
       const stopNotifications = this.community.watchNotifications(
         uid,
-        (notifications) => this.notifications.set(notifications),
+        (notifications) =>
+          this.notifications.set([...this.staticNotifications, ...notifications]),
         (error) => this.backendError.set(error.message),
       );
       onCleanup(() => {
@@ -248,6 +276,41 @@ export class DiscoveryPage {
     });
 
     this.darkTheme.set(localStorage.getItem('lakvay-theme') === 'dark');
+    afterNextRender(() => this.detectCurrentLocation());
+  }
+
+  private detectCurrentLocation(): void {
+    if (!navigator.geolocation) return;
+    this.locating.set(true);
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords.latitude}&lon=${coords.longitude}`,
+            { headers: { Accept: 'application/json' } },
+          );
+          if (!response.ok) throw new Error('Location lookup failed');
+          const data = (await response.json()) as {
+            address?: { city?: string; town?: string; municipality?: string; state?: string };
+          };
+          const address = data.address;
+          this.locationLabel.set(
+            [address?.city || address?.town || address?.municipality, address?.state]
+              .filter(Boolean)
+              .join(', ') || 'Current location',
+          );
+        } catch {
+          this.locationLabel.set('Current location');
+        } finally {
+          this.locating.set(false);
+        }
+      },
+      () => {
+        this.locationLabel.set('Iloilo City');
+        this.locating.set(false);
+      },
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 },
+    );
   }
 
   protected navigate(view: WorkspaceView): void {
@@ -258,6 +321,11 @@ export class DiscoveryPage {
   protected toggleTheme(): void {
     this.darkTheme.update((dark) => !dark);
     localStorage.setItem('lakvay-theme', this.darkTheme() ? 'dark' : 'light');
+  }
+
+  protected setLightTheme(): void {
+    this.darkTheme.set(false);
+    localStorage.setItem('lakvay-theme', 'light');
   }
 
   protected openHelp(): void {
@@ -349,13 +417,28 @@ export class DiscoveryPage {
 
   protected async markNotificationsRead(): Promise<void> {
     const user = this.signedInUser();
-    if (!user) return;
+    if (!user) {
+      this.notifications.update((items) => items.map((item) => ({ ...item, read: true })));
+      this.notificationsOpen.set(false);
+      return;
+    }
     await Promise.all(
       this.notifications()
         .filter((notification) => !notification.read)
+        .filter((notification) => !notification.id.startsWith('static-'))
         .map((notification) => this.community.markNotificationRead(user.uid, notification.id)),
     );
+    this.notifications.update((items) => items.map((item) => ({ ...item, read: true })));
     this.notificationsOpen.set(false);
+  }
+
+  protected async becomeMerchant(): Promise<void> {
+    try {
+      await this.auth.becomeMerchant();
+      this.showToast('Merchant mode is ready. Add your first place to Lakvay.');
+    } catch (error) {
+      this.backendError.set(this.backendErrorMessage(error, 'Unable to enable merchant mode.'));
+    }
   }
 
   protected updateProfileName(event: Event): void {
@@ -439,6 +522,10 @@ export class DiscoveryPage {
     this.navigate('profile');
   }
 
+  protected toggleDirections(): void {
+    this.directionsOpen.update((open) => !open);
+  }
+
   protected openBusinessById(businessId: string): void {
     const business = this.businesses().find((item) => item.id === businessId);
     if (business) this.openBusiness(business);
@@ -462,11 +549,6 @@ export class DiscoveryPage {
   }
 
   protected async toggleSaved(business: PublicBusiness): Promise<void> {
-    if (this.isDemoBusiness(business)) {
-      this.showToast('Sample businesses cannot be saved to your Firestore account.');
-      return;
-    }
-
     const user = this.signedInUser();
     if (!user) {
       this.openAuthDialog();

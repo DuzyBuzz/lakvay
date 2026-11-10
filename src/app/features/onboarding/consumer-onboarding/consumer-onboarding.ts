@@ -19,12 +19,12 @@ const ARCHETYPE_ORDER: Archetype[] = [
 ];
 
 const ARCHETYPE_TITLES: Record<Archetype, string> = {
-  Amaran: 'the café lover',
-  Lakandiwa: 'the food explorer',
-  Dayawan: 'the refined diner',
-  Haranista: 'the nightlife lover',
-  Hirayan: 'the aesthetic foodie',
-  Siga: 'the bold-flavor lover',
+  Amaran: 'The Local Soul',
+  Lakandiwa: 'The Cultural Connoisseur',
+  Dayawan: 'The Social Feaster',
+  Haranista: 'The Ambience Seeker',
+  Hirayan: 'The Curious Explorer',
+  Siga: 'The Flavor Chaser',
 };
 
 const ANSWER_ARCHETYPES: Record<ConsumerQuestionId, Record<string, Archetype>> = {
@@ -178,7 +178,7 @@ export class ConsumerOnboarding {
       this.tieBreak(tiedArchetypes, answers.food, 'food') ??
       this.tieBreak(tiedArchetypes, answers.experience, 'experience') ??
       tiedArchetypes[0];
-    return `${winner} — ${ARCHETYPE_TITLES[winner]}`;
+    return `${winner.toUpperCase()} — ${ARCHETYPE_TITLES[winner]}`;
   });
 
   constructor() {

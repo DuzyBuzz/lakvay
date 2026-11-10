@@ -1,0 +1,28 @@
+/* Keep the workspace readable when the user chooses the dark theme. */
+.lakvay-dark {
+  color-scheme: dark;
+}
+
+.lakvay-dark .bg-white,
+.lakvay-dark .bg-white\/95 {
+  background-color: #1e293b;
+}
+
+.lakvay-dark .bg-\[\#faf8f6\],
+.lakvay-dark .bg-\[\#fcf8f5\],
+.lakvay-dark .bg-\[\#fcfaf8\] {
+  background-color: #0f172a;
+}
+
+.lakvay-dark .text-slate-900,
+.lakvay-dark .text-slate-800,
+.lakvay-dark .text-slate-700,
+.lakvay-dark .text-slate-600 {
+  color: #e2e8f0;
+}
+
+.lakvay-dark .border-\[\#eee8e4\],
+.lakvay-dark .border-slate-200,
+.lakvay-dark .border-slate-100 {
+  border-color: #334155;
+}

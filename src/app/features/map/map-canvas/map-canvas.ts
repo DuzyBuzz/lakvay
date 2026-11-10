@@ -49,7 +49,12 @@ export class MapCanvas {
   }
 
   private initializeMap(): void {
-    this.map = L.map(this.mapElement().nativeElement).setView([10.695, 122.565], 13);
+    this.map = L.map(this.mapElement().nativeElement, {
+      zoomControl: false,
+    }).setView([10.695, 122.565], 13);
+    L.control
+      .zoom({ position: 'topright' })
+      .addTo(this.map);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',

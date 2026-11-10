@@ -43,15 +43,15 @@ describe('App', () => {
     mapButton?.click();
     fixture.detectChanges();
 
-    expect(root.textContent).toContain('Sample data');
+    expect(root.textContent).toContain('Curated places');
     expect(root.textContent).not.toContain('Development preview');
-    expect(root.textContent).toContain('5 places to explore');
-    expect(root.textContent).toContain('5 mapped');
-    const sampleButtons = Array.from(root.querySelectorAll('button')).filter(
-      (button) => button.textContent?.trim() === 'Sample',
+    expect(root.textContent).toContain('9 places to explore');
+    expect(root.textContent).toContain('9 mapped');
+    const saveButtons = Array.from(root.querySelectorAll('button')).filter(
+      (button) => button.textContent?.trim() === 'Save',
     );
-    expect(sampleButtons).toHaveLength(5);
-    expect(sampleButtons.every((button) => button.disabled)).toBe(true);
+    expect(saveButtons).toHaveLength(9);
+    expect(saveButtons.every((button) => !button.disabled)).toBe(true);
 
     const searchInput = root.querySelector(
       'input[placeholder="Search businesses, categories, or address"]',
@@ -64,7 +64,7 @@ describe('App', () => {
     expect(root.textContent).toContain('2 mapped');
     expect(
       Array.from(root.querySelectorAll('button')).filter(
-        (button) => button.textContent?.trim() === 'Sample',
+        (button) => button.textContent?.trim() === 'Save',
       ),
     ).toHaveLength(2);
   });
@@ -83,18 +83,12 @@ describe('App', () => {
     expect(fixture.nativeElement.querySelector('[role="dialog"]')).not.toBeNull();
   });
 
-  it('should show the Firebase setup notice from the merchant entry point', () => {
+  it('should keep merchant and theme controls out of the sidebar', () => {
     const fixture = TestBed.createComponent(DiscoveryPage);
     fixture.detectChanges();
     const root = fixture.nativeElement as HTMLElement;
-    const dashboardButton = Array.from(
-      root.querySelectorAll('button'),
-    ).find((button) => button.textContent?.includes('Go to Dashboard'));
-
-    dashboardButton?.click();
-    fixture.detectChanges();
-
-    expect(root.textContent).toContain('Firebase is not configured yet.');
-    expect(root.querySelector('[role="dialog"]')).not.toBeNull();
+    const sidebar = root.querySelector('aside');
+    expect(sidebar?.textContent).not.toContain('Are you a merchant?');
+    expect(sidebar?.textContent).not.toContain('Theme');
   });
 });

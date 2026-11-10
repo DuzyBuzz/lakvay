@@ -1,0 +1,20 @@
+<div class="relative h-full min-h-80 overflow-hidden rounded-2xl">
+  <div #mapElement class="h-full min-h-80 w-full" aria-label="Map showing directions to this place"></div>
+  <div class="absolute left-3 top-3 z-[400] max-w-[calc(100%-1.5rem)] rounded-xl bg-white/95 p-3 shadow-lg backdrop-blur">
+    <button
+      type="button"
+      class="flex items-center gap-2 rounded-lg bg-[#1d2d51] px-3 py-2 text-xs font-semibold text-white hover:bg-[#293d68] disabled:opacity-60"
+      [disabled]="locating()"
+      (click)="locateMe()"
+    >
+      <span class="material-symbols-outlined text-base">my_location</span>
+      {{ locating() ? 'Locating…' : 'Use my location' }}
+    </button>
+    @if (distance() || duration()) {
+      <p class="mt-2 text-xs font-semibold text-[#1d2d51]">{{ distance() }} · {{ duration() }}</p>
+    }
+    @if (error()) {
+      <p class="mt-2 max-w-64 text-xs text-red-700" role="alert">{{ error() }}</p>
+    }
+  </div>
+</div>

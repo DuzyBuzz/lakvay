@@ -42,6 +42,43 @@ export class Auth {
   readonly isMerchant = computed(() => this.currentAccountType() === 'merchant');
   readonly isAuthenticated = computed(() => this.currentUser() !== null);
   readonly consumerAnswers = this.currentConsumerAnswers.asReadonly();
+  readonly consumerPersonality = computed(() => {
+    const scores: Record<string, number> = {
+      Amaran: 0, Lakandiwa: 0, Dayawan: 0, Haranista: 0, Hirayan: 0, Siga: 0,
+    };
+    const mapping: Record<string, string> = {
+      'Bakeries & Pastry Shops': 'Amaran', 'Cafés & Coffee Shops': 'Amaran',
+      'Cozy & Relaxed': 'Amaran', 'Nature & Outdoorsy': 'Amaran', Bitter: 'Amaran',
+      'Ambience & Comfort': 'Amaran',
+      'Carinderias & Local Eateries': 'Lakandiwa', 'Buffet Restaurants': 'Lakandiwa',
+      'Local & Community-Oriented': 'Lakandiwa', 'Adventurous & Experimental': 'Lakandiwa',
+      Sour: 'Lakandiwa', 'Exploring & Spontaneous Discoveries': 'Lakandiwa',
+      'Menu Variety & Selection': 'Lakandiwa',
+      'Casual Dining Restaurants': 'Dayawan', 'Fine Dining Restaurants': 'Dayawan',
+      'Premium & Upscale': 'Dayawan', 'Cultural & Heritage-Inspired': 'Dayawan',
+      'Savory & Umami': 'Dayawan', 'Web browser': 'Dayawan',
+      'Food Quality & Taste': 'Dayawan', 'Quality Service': 'Dayawan',
+      'Bars & Pubs': 'Haranista', 'Social & Lively': 'Haranista', Salty: 'Haranista',
+      'Friends, Family & Community': 'Haranista', 'Location & Convenience': 'Haranista',
+      'Themed & Concept Restaurants': 'Hirayan', 'Aesthetic & Trendy': 'Hirayan',
+      'Interactive & Immersive': 'Hirayan', Sweet: 'Hirayan', 'Social Media': 'Hirayan',
+      'Reputation & Reviews': 'Hirayan',
+      'Food stalls': 'Siga', 'Quick & Convenient': 'Siga', Spicy: 'Siga',
+      'Food Events & Markets': 'Siga', 'Price & Value': 'Siga',
+    };
+    for (const answers of Object.values(this.currentConsumerAnswers())) {
+      for (const answer of answers ?? []) {
+        const archetype = mapping[answer];
+        if (archetype) scores[archetype] += 1;
+      }
+    }
+    const winner = Object.keys(scores).sort((a, b) => scores[b] - scores[a])[0];
+    const titles: Record<string, string> = {
+      Amaran: 'The Local Soul', Lakandiwa: 'The Cultural Connoisseur', Dayawan: 'The Social Feaster',
+      Haranista: 'The Ambience Seeker', Hirayan: 'The Curious Explorer', Siga: 'The Flavor Chaser',
+    };
+    return `${winner.toUpperCase()} — ${titles[winner]}`;
+  });
   readonly needsConsumerOnboarding = computed(
     () => this.currentAccountType() === 'consumer' && !this.consumerOnboardingCompleted(),
   );
@@ -149,6 +186,22 @@ export class Auth {
       { merge: true },
     );
     this.currentUser.set(user);
+  }
+
+  async becomeMerchant(): Promise<void> {
+    const user = this.currentUser();
+    const firestore = this.firebase.firestore;
+    if (!user || !firestore) {
+      throw new Error('Sign in before creating a merchant profile.');
+    }
+    if (this.currentAccountType() === 'merchant') return;
+
+    await setDoc(
+      doc(firestore, 'users', user.uid),
+      { accountType: 'merchant', updatedAt: serverTimestamp() },
+      { merge: true },
+    );
+    this.currentAccountType.set('merchant');
   }
 
   async saveConsumerAnswer(questionId: ConsumerQuestionId, answersForQuestion: string[]): Promise<void> {
